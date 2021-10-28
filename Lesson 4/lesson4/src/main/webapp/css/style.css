@@ -1,0 +1,259 @@
+:root {
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    color: rgb(34, 34, 34);
+
+    --border-color: rgb(185, 185, 185);
+    --boder: 1px solid var(--border-color);
+    --border-radius: 6px;
+    --caption-color: #3B5998;
+    --black-color: #333;
+    --seach-color: #f4f4f4;
+    --table-background-color: #E1E1E1;
+    --table-border-color: #e1e1e1;
+    --table-odd-tr-color: #f8f8f8;
+    --article-title-color: #3b5998;
+    --login-small-font-size: .7rem;
+}
+
+html {
+    min-width: 800px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+header {
+    position: relative;
+}
+
+header .languages {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+header .enter-or-register-box {
+    position: absolute;
+    top: calc(24px + 0.5rem);
+    right: 0;
+}
+
+header nav {
+    border: var(--boder);
+    border-radius: var(--border-radius);
+    margin: 0.5rem 0 2rem 0;
+}
+
+header nav ul {
+    padding: 0;
+    margin: 1rem;
+}
+
+header nav ul li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: black;
+    font-family: Arial, sans-serif;
+    margin-right: 1rem;
+}
+
+header nav ul li a.underlined {
+    border-bottom: 3px solid var(--caption-color);
+}
+
+.middle {
+    display: flow-root;
+}
+
+aside {
+    float: right;
+    width: 20rem;
+}
+
+aside section {
+    border: var(--boder);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+aside section .header {
+    border-bottom: var(--boder);
+    padding: 0.25rem;
+    font-weight: bold;
+    color: var(--caption-color);
+}
+
+aside section .header:before {
+    content: "→ ";
+    font-size: 1.1rem;
+}
+
+aside section .body {
+    padding: 0.25rem;
+}
+
+aside section .footer {
+    border-top: var(--boder);
+    padding: 0.25rem;
+    text-align: right;
+    font-size: 0.8rem;
+}
+
+aside section .footer a:after {
+    content: " →";
+}
+
+main {
+    margin-right: 21rem;
+}
+
+main .user_block {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: .4rem;
+
+    overflow: hidden;
+}
+
+main .user_block .info_block {
+    display: inline-block;
+}
+
+main .user_block .info_block .name {
+    font-size: 1.3rem;
+}
+
+main .user_block img {
+    float: right;
+    display: block;
+}
+
+main .users_switch_controllers {
+    font-size: 1.5rem;
+}
+
+main .users_switch_controllers a {
+    text-decoration: none
+}
+
+main .users_switch_controllers a.dis {
+    color: gray;
+}
+
+main .datatable {
+    background: var(--table-background-color);
+    border-radius: var(--border-radius);
+    padding: 2px;
+}
+
+main .datatable .caption {
+    padding: .2rem 0 .2rem .6rem;
+}
+
+main .datatable table {
+    background: white;
+    border-collapse:collapse;
+    width: 100%;
+}
+
+main .datatable table tbody tr:nth-child(2n+1) {
+    background: var(--table-odd-tr-color);
+}
+
+main .datatable table th,
+main .datatable table tbody tr td {
+    text-align: center;
+    padding: .4rem;
+    border-top: 1px solid var(--table-border-color);
+    border-right: 1px solid var(--table-border-color);
+}
+
+main article {
+    margin: 0 0 2rem 0;
+}
+
+main article:last-child {
+    margin: 0;
+}
+
+main article .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--article-title-color);
+}
+
+main article .information {
+    padding-top: .3rem;
+    color: gray;
+}
+
+main article .body {
+    border-left: 4px solid var(--border-color);
+    padding-left: 1rem;
+}
+
+main article .attachment {
+    color: gray;
+    font-size: .7rem;
+    padding: 0;
+    margin-bottom: .3rem;
+}
+
+main article .attachment li {
+    list-style: none;
+    background: url("/img/paperclip-16x16.png") no-repeat top left;
+    min-height: calc(16px + .3rem);
+    padding-left: calc(16px + .5rem);
+}
+
+main article .footer {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+
+    padding: .3rem;
+}
+
+main article .footer {
+    overflow: hidden;
+}
+
+main article .footer img {
+    vertical-align: middle;
+}
+
+main article .footer .left img {
+    height: 1.5rem;
+}
+
+main article .footer .left {
+    color: green;
+    font-weight: bold;
+
+    display: inline-block;
+}
+
+main article .footer .right img {
+    height: 1rem;
+}
+
+main article .footer .right {
+    display: inline-block;
+    float: right;
+    margin-top: .2rem;
+}
+
+footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: var(--boder);
+    text-align: center;
+}

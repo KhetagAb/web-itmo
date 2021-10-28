@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Captcha</title>
+</head>
+<body>
+<img style='display:block; width:100px;height:100px;' id='base64image'
+     src='data:image/jpeg;base64, %s'
+     alt="Captcha"/>
+<div class="captcha-form">
+    <form method="get" action="%s">
+        <label for="%s">Введите число с картинки: </label><br>
+        <input id="%s" name="captchaValue"/><br><br>
+    </form>
+</div>
+</body>
+</html>
