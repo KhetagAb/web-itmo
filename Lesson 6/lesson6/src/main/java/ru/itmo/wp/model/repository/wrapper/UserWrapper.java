@@ -36,9 +36,4 @@ public class UserWrapper implements Wrapper<User> {
 
         return user;
     }
-
-    @Override
-    public Object[] unwrap(User element) {
-        return new Object[0];
-    }
 }

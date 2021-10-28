@@ -10,11 +10,30 @@ import java.sql.SQLException;
 public class EventWrapper implements Wrapper<Event> {
     @Override
     public Event wrap(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {
-        return null;
-    }
+        if (!resultSet.next()) {
+            return null;
+        }
 
-    @Override
-    public Object[] unwrap(Event element) {
-        return new Object[0];
+        Event event = new Event();
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {
+            switch (metaData.getColumnName(i)) {
+                case "id":
+                    event.setId(resultSet.getLong(i));
+                    break;
+                case "userId":
+                    event.setUserId(Long.parseLong(resultSet.getString(i)));
+                    break;
+                case "":
+                    event.setType(Event.EventType.valueOf(resultSet.getString(i)));
+                    break;
+                case "creationTime":
+                    event.setCreationTime(resultSet.getTimestamp(i));
+                    break;
+                default:
+                    // No operations.
+            }
+        }
+
+        return event;
     }
 }

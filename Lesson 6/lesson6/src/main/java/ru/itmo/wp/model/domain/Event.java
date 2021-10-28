@@ -41,7 +41,7 @@ public class Event implements Serializable {
         return creationTime;
     }
 
-    enum EventType {
+    public enum EventType {
         ENTER,
         LOGOUT
     }

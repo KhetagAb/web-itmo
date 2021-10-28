@@ -8,10 +8,8 @@ import ru.itmo.wp.model.repository.wrapper.UserWrapper;
 
 import java.sql.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
-
-public class UserRepositoryImpl extends AbstractRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl extends AbstractRepositoryImpl<User> implements UserRepository {
     private final Wrapper<User> userWrapper = new UserWrapper();
     private final String DATA_BASE_NAME = "User";
 
@@ -21,37 +19,34 @@ public class UserRepositoryImpl extends AbstractRepositoryImpl implements UserRe
     }
 
     @Override
-    protected Wrapper<?> getElementWrapper() {
+    protected Wrapper<User> getElementWrapper() {
         return userWrapper;
     }
 
     @Override
     public User find(long id) {
-        return (User) findById(id);
+        return findById(id);
     }
 
     @Override
     public User findByLogin(String login) {
-        return (User) findByArguments(new String[]{"login"}, new Object[]{login});
+        return findByArguments(new String[]{"login"}, new Object[]{login});
     }
 
     @Override
     public User findByEmail(String email) {
-        return (User) findByArguments(new String[]{"email"}, new Object[]{email});
+        return findByArguments(new String[]{"email"}, new Object[]{email});
     }
 
     @Override
     public List<User> findAll() {
-        List<Object> users = findAllOrderedById();
-        return users.stream()
-                .map(element -> (User) element)
-                .collect(Collectors.toList());
+        return findAllOrderedById();
     }
 
     @Override
     public User findByLoginOrEmailAndPasswordSha(String token, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE (login=? OR email=?) AND passwordSha=?")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + DATA_BASE_NAME + " WHERE (login=? OR email=?) AND passwordSha=?")) {
                 statement.setString(1, token);
                 statement.setString(2, token);
                 statement.setString(3, passwordSha);
@@ -66,7 +61,7 @@ public class UserRepositoryImpl extends AbstractRepositoryImpl implements UserRe
 
     public void save(User user, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `User` (`login`, `email`, `passwordSha`, `creationTime`) VALUES (?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + DATA_BASE_NAME + "` (`login`, `email`, `passwordSha`, `creationTime`) VALUES (?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getLogin());
                 statement.setString(2, user.getEmail());
                 statement.setString(3, passwordSha);

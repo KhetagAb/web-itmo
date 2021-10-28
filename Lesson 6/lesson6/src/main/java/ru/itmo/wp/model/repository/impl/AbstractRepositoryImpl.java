@@ -14,22 +14,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractRepositoryImpl {
+public abstract class AbstractRepositoryImpl<T> {
     protected final DataSource DATA_SOURCE = DatabaseUtils.getDataSource();
 
     protected abstract String getDataBaseName();
-    protected abstract Wrapper<?> getElementWrapper();
 
-    protected Object findById(long id) {
+    protected abstract Wrapper<T> getElementWrapper();
+
+    protected T findById(long id) {
         return findByArguments(new String[]{"id"}, new Object[]{id});
     }
 
-    protected List<Object> findAllOrderedById() {
-        List<Object> elements = new ArrayList<>();
+    protected List<T> findAllOrderedById() {
+        List<T> elements = new ArrayList<>();
         try (Connection connection = DATA_SOURCE.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getDataBaseName() + " ORDER BY id DESC")) {
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    Object element;
+                    T element;
                     while ((element = getElementWrapper().wrap(statement.getMetaData(), resultSet)) != null) {
                         elements.add(element);
                     }
@@ -54,16 +55,16 @@ public abstract class AbstractRepositoryImpl {
         }
     }
 
-    protected Object findByArguments(String[] argumentNames, Object[] argumentValues) {
+    protected T findByArguments(String[] argumentNames, Object[] argumentValues) {
         String query = Arrays.stream(argumentNames)
                 .map(e -> e + "=?")
                 .collect(Collectors.joining(" AND "));
 
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getDataBaseName() +" WHERE " + query)) {
-                   for (int i = 0; i < argumentNames.length; i++) {
-                       statement.setObject(i + 1, argumentValues[i]);
-                   }
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getDataBaseName() + " WHERE " + query)) {
+                for (int i = 0; i < argumentNames.length; i++) {
+                    statement.setObject(i + 1, argumentValues[i]);
+                }
                 try (ResultSet resultSet = statement.executeQuery()) {
                     return getElementWrapper().wrap(statement.getMetaData(), resultSet);
                 }
