@@ -1,4 +1,8 @@
 /* datatable */
+.datatable {
+    margin: 1rem 0 0 0;
+}
+
 .datatable table {
     width: 100%;
     text-align: center;

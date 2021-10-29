@@ -12,6 +12,26 @@ public class DatabaseUtils {
     public static DataSource getDataSource() {
         return DataSourceHolder.INSTANCE;
     }
+//
+//    public static <T> List<T> findAllByQuery(Wrapper<T> wrapper, String query, Object... queryArguments) {
+//        List<T> elements = new ArrayList<>();
+//        try (Connection connection = getDataSource().getConnection()) {
+//            try (PreparedStatement statement = connection.prepareStatement(query)) {
+//                for (int i = 0; i < queryArguments.length; i++) {
+//                    statement.setObject(i + 1, queryArguments[i]);
+//                }
+//                try (ResultSet resultSet = statement.executeQuery()) {
+//                    T element;
+//                    while ((element = wrapper.wrap(statement.getMetaData(), resultSet)) != null) {
+//                        elements.add(element);
+//                    }
+//                    return elements;
+//                }
+//            }
+//        } catch (SQLException e) {
+//            throw new RepositoryException("Can't find elements all elements by query " + query, e);
+//        }
+//    }
 
     private static final class DataSourceHolder {
         private static final DataSource INSTANCE;

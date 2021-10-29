@@ -35,6 +35,11 @@
     width: 100%;
 }
 
+.form-box .field textarea {
+    width: 100%;
+    resize: none;
+}
+
 .form-box .button-field {
     margin: 1.5rem 1.5rem 1.5rem 12rem;
 }

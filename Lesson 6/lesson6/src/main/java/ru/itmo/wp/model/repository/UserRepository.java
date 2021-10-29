@@ -2,14 +2,14 @@ package ru.itmo.wp.model.repository;
 
 import ru.itmo.wp.model.domain.User;
 
-import java.util.List;
+public interface UserRepository extends AbstractRepository<User> {
+    User findById(long id);
 
-public interface UserRepository {
-    User find(long id);
     User findByLogin(String login);
+
     User findByEmail(String email);
+
     User findByLoginOrEmailAndPasswordSha(String login, String passwordSha);
-    int findCount();
-    List<User> findAll();
-    void save(User user, String passwordSha);
+
+    User save(User user, String passwordSha);
 }

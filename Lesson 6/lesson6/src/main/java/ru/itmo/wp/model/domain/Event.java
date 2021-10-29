@@ -42,7 +42,17 @@ public class Event implements Serializable {
     }
 
     public enum EventType {
-        ENTER,
-        LOGOUT
+        ENTER("ENTER"),
+        LOGOUT("LOGOUT");
+
+        private final String DB_NAME;
+
+        EventType(String db_name) {
+            DB_NAME = db_name;
+        }
+
+        public String getDB_NAME() {
+            return DB_NAME;
+        }
     }
 }

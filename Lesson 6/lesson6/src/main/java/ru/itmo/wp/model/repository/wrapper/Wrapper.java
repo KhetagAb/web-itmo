@@ -1,4 +1,4 @@
-package ru.itmo.wp.model.repository;
+package ru.itmo.wp.model.repository.wrapper;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

@@ -1,7 +1,6 @@
 package ru.itmo.wp.model.repository.wrapper;
 
 import ru.itmo.wp.model.domain.User;
-import ru.itmo.wp.model.repository.Wrapper;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -30,7 +29,7 @@ public class UserWrapper implements Wrapper<User> {
                     user.setCreationTime(resultSet.getTimestamp(i));
                     break;
                 default:
-                    // No operations.
+                    // Do nothing
             }
         }
 

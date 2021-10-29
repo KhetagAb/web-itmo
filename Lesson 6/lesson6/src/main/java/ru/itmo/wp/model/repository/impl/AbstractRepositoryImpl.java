@@ -2,7 +2,7 @@ package ru.itmo.wp.model.repository.impl;
 
 import ru.itmo.wp.model.database.DatabaseUtils;
 import ru.itmo.wp.model.exception.RepositoryException;
-import ru.itmo.wp.model.repository.Wrapper;
+import ru.itmo.wp.model.repository.wrapper.Wrapper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -21,14 +21,14 @@ public abstract class AbstractRepositoryImpl<T> {
 
     protected abstract Wrapper<T> getElementWrapper();
 
-    protected T findById(long id) {
-        return findByArguments(new String[]{"id"}, new Object[]{id});
+    public T findById(long id) {
+        return findByAllArguments(new String[]{"id"}, new Object[]{id});
     }
 
-    protected List<T> findAllOrderedById() {
+    public List<T> findAll() {
         List<T> elements = new ArrayList<>();
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getDataBaseName() + " ORDER BY id DESC")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + getDataBaseName())) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     T element;
                     while ((element = getElementWrapper().wrap(statement.getMetaData(), resultSet)) != null) {
@@ -55,7 +55,7 @@ public abstract class AbstractRepositoryImpl<T> {
         }
     }
 
-    protected T findByArguments(String[] argumentNames, Object[] argumentValues) {
+    protected T findByAllArguments(String[] argumentNames, Object[] argumentValues) {
         String query = Arrays.stream(argumentNames)
                 .map(e -> e + "=?")
                 .collect(Collectors.joining(" AND "));

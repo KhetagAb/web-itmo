@@ -9,23 +9,20 @@ import ru.itmo.wp.model.repository.impl.UserRepositoryImpl;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.regex.Pattern;
 
-/** @noinspection UnstableApiUsage*/
+/**
+ * @noinspection UnstableApiUsage
+ */
 public class UserService {
-    private final UserRepository userRepository = new UserRepositoryImpl();
     private static final String PASSWORD_SALT = "177d4b5f2e4f4edafa7404533973c04c513ac619";
+    private final Pattern LOGIN_MATCHER = Pattern.compile("[a-z]+");
+    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final EventService eventService = new EventService();
 
     public void validateRegistration(User user, String password, String passwordConformation) throws ValidationException {
-        if (Strings.isNullOrEmpty(user.getLogin())) {
-            throw new ValidationException("Login is required");
-        }
-        if (!user.getLogin().matches("[a-z]+")) {
-            throw new ValidationException("Login can contain only lowercase Latin letters");
-        }
-        if (user.getLogin().length() > 8) {
-            throw new ValidationException("Login can't be longer than 8 letters");
-        }
-        if (userRepository.findByLogin(user.getLogin()) != null) {
+        validateLogin(user.getLogin());
+        if (findUserByLogin(user.getLogin()) != null) {
             throw new ValidationException("Login is already in use");
         }
 
@@ -53,24 +50,51 @@ public class UserService {
         }
     }
 
-    public int findCount() {
-        return userRepository.findCount();
+    public User validateEnter(String token, String password) throws ValidationException {
+        User user = userRepository.findByLoginOrEmailAndPasswordSha(token, getPasswordSha(password));
+        if (user == null) {
+            throw new ValidationException("Invalid email/login or password");
+        }
+
+        eventService.addEnterEvent(user);
+
+        return user;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public void validateLogin(String login) throws ValidationException {
+        if (Strings.isNullOrEmpty(login)) {
+            throw new ValidationException("Login is required");
+        }
+        if (!LOGIN_MATCHER.matcher(login).matches()) {
+            throw new ValidationException("Login can contain only lowercase Latin letters");
+        }
+        if (login.length() > 8) {
+            throw new ValidationException("Login can't be longer than 8 letters");
+        }
     }
 
     public void register(User user, String password) {
         userRepository.save(user, getPasswordSha(password));
     }
 
-    public User validateEnter(String token, String password) throws ValidationException {
-        User user = userRepository.findByLoginOrEmailAndPasswordSha(token, getPasswordSha(password));
-        if (user == null) {
-            throw new ValidationException("Invalid email/login or password");
-        }
-        return user;
+    public void logout(User user) {
+        eventService.addLogoutEvent(user);
+    }
+
+    public User findUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    public User findUserById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public int findCount() {
+        return userRepository.findCount();
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     private String getPasswordSha(String password) {
