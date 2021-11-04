@@ -50,7 +50,7 @@ public class UserService {
         }
     }
 
-    public User validateEnter(String token, String password) throws ValidationException {
+    public User validateAndEnter(String token, String password) throws ValidationException {
         User user = userRepository.findByLoginOrEmailAndPasswordSha(token, getPasswordSha(password));
         if (user == null) {
             throw new ValidationException("Invalid email/login or password");

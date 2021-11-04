@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="loginOrEmail" type="String" -->
 <#-- @ftlvariable name="login" type="java.lang.String" -->
 <#-- @ftlvariable name="email" type="java.lang.String" -->
 <#-- @ftlvariable name="password" type="java.lang.String" -->
@@ -15,7 +16,7 @@
                         <label for="loginOrEmail">Login or Email</label>
                     </div>
                     <div class="value">
-                        <input id="loginOrEmail" name="loginOrEmail" value="<#if login?has_content>${login}<#else>${email!}</#if>"/>
+                        <input id="loginOrEmail" name="loginOrEmail" value="${loginOrEmail!}"/>
                     </div>
                 </div>
                 <div class="field">
@@ -23,7 +24,7 @@
                         <label for="password">Password</label>
                     </div>
                     <div class="value">
-                        <input id="password" name="password" type="password" value="${password!}"/>
+                        <input id="password" name="password" type="password"/>
                     </div>
                 </div>
                 <#if error??>

@@ -1,9 +1,11 @@
 package ru.itmo.wp.model.domain;
 
-import java.io.Serializable;
-import java.util.Date;
+import ru.itmo.wp.model.repository.wrapper.WrapAble;
 
-public class User implements Serializable {
+import java.util.Date;
+import java.util.Map;
+
+public class User implements WrapAble {
     private long id;
     private String login;
     private String email;
@@ -35,6 +37,12 @@ public class User implements Serializable {
 
     public Date getCreationTime() {
         return creationTime;
+    }
+
+    @Override
+    public Map<String, Object> unwrap() {
+        return Map.of("login", this.getLogin(),
+                "email", this.getEmail());
     }
 
     public void setCreationTime(Date creationTime) {

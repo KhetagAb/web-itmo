@@ -61,8 +61,12 @@
     </main>
 </div>
 <footer>
-    <a href="/index">Codeforces</a> &copy; 2020 by Mike Mirzayanov | Users: ${userCount}
+    <a href="/index">Codeforces</a> &copy; 2020 by Mike Mirzayanov | <@showUserCount/>
 </footer>
 </body>
 </html>
+</#macro>
+
+<#macro showUserCount>
+    Users: <a href="/users" style="text-decoration: none">${userCount}</a>
 </#macro>

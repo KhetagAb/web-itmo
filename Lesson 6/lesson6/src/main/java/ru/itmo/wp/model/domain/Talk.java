@@ -1,8 +1,11 @@
 package ru.itmo.wp.model.domain;
 
-import java.util.Date;
+import ru.itmo.wp.model.repository.wrapper.WrapAble;
 
-public class Talk {
+import java.util.Date;
+import java.util.Map;
+
+public class Talk implements WrapAble {
     private long id;
     private long sourceUserId;
     private long targetUserId;
@@ -43,6 +46,13 @@ public class Talk {
 
     public Date getCreationTime() {
         return creationTime;
+    }
+
+    @Override
+    public Map<String, Object> unwrap() {
+        return Map.of("sourceUserId", this.getSourceUserId(),
+                "targetUserId", this.getTargetUserId(),
+                "text", this.getText());
     }
 
     public void setCreationTime(Date creationTime) {

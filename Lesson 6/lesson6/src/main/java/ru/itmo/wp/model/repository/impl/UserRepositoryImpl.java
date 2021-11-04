@@ -7,6 +7,7 @@ import ru.itmo.wp.model.repository.wrapper.UserWrapper;
 import ru.itmo.wp.model.repository.wrapper.Wrapper;
 
 import java.sql.*;
+import java.util.List;
 
 public class UserRepositoryImpl extends AbstractRepositoryImpl<User> implements UserRepository {
     private final Wrapper<User> userWrapper = new UserWrapper();
@@ -55,7 +56,8 @@ public class UserRepositoryImpl extends AbstractRepositoryImpl<User> implements 
 
     public User save(User user, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + DATA_BASE_NAME + "` (`login`, `email`, `passwordSha`, `creationTime`) VALUES (?, ?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
+            String sqlRequest = getSaveSqlRequest(List.of("login", "email", "passwordSha"));
+            try (PreparedStatement statement = connection.prepareStatement(sqlRequest, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getLogin());
                 statement.setString(2, user.getEmail());
                 statement.setString(3, passwordSha);

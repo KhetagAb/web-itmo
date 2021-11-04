@@ -17,9 +17,13 @@ public class EventService {
     }
 
     public Event addEvent(User user, Event.EventType eventType) {
-        Event event = new Event();
-        event.setUserId(user.getId());
-        event.setType(eventType);
-        return eventRepository.save(event);
+        if (user != null && eventType != null) {
+            Event event = new Event();
+            event.setUserId(user.getId());
+            event.setType(eventType);
+            return eventRepository.save(event);
+        } else {
+            throw new IllegalStateException("Event type and user must be not null");
+        }
     }
 }

@@ -68,4 +68,13 @@ public abstract class AbstractPage {
             getSession().setAttribute("user", user);
         }
     }
+
+    protected void setUser(User user, String message) {
+        if (user == null) {
+            getSession().removeAttribute("user");
+        } else {
+            getSession().setAttribute("user", user);
+        }
+        setMessage(message);
+    }
 }

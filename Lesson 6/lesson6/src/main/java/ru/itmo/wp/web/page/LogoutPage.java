@@ -13,8 +13,7 @@ public class LogoutPage extends AbstractPage {
     protected void action(HttpServletRequest request, Map<String, Object> view) {
         userService.logout(getUser());
 
-        setUser(null);
-        setMessage("Good bye. Hope to see you soon!");
+        setUser(null, "Good bye. Hope to see you soon!");
         throw new RedirectException("/index");
     }
 }

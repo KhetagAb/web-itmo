@@ -1,6 +1,8 @@
+<#-- @ftlvariable name="targetLogin" type="String" -->
 <#-- @ftlvariable name="text" type="String" -->
 <#-- @ftlvariable name="login" type="String" -->
 <#-- @ftlvariable name="error" type="String" -->
+<#-- @ftlvariable name="user" type="ru.itmo.wp.model.domain.User" -->
 <#-- @ftlvariable name="users" type="ru.itmo.wp.model.domain.User[]" -->
 <#-- @ftlvariable name="talks" type="ru.itmo.wp.model.dto.TalkDto[]" -->
 <#import "commons.ftlh" as c>
@@ -18,7 +20,11 @@
                     <div class="value">
                         <select id="targetLogin" name="targetLogin">
                             <#list users as user>
-                                <option>${user.login}</option>
+                                <#if user.getLogin() == targetLogin!>
+                                    <option selected="selected">${user.login}</option>
+                                <#else>
+                                    <option>${user.login}</option>
+                                </#if>
                             </#list>
                         </select>
                     </div>

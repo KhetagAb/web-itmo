@@ -1,9 +1,11 @@
 package ru.itmo.wp.model.domain;
 
-import java.io.Serializable;
-import java.util.Date;
+import ru.itmo.wp.model.repository.wrapper.WrapAble;
 
-public class Event implements Serializable {
+import java.util.Date;
+import java.util.Map;
+
+public class Event implements WrapAble {
     private long id;
     private long userId;
     private EventType type;
@@ -41,18 +43,24 @@ public class Event implements Serializable {
         return creationTime;
     }
 
+    @Override
+    public Map<String, Object> unwrap() {
+        return Map.of("userId", this.getUserId(),
+                "type", this.getType().getDBParameter());
+    }
+
     public enum EventType {
         ENTER("ENTER"),
         LOGOUT("LOGOUT");
 
-        private final String DB_NAME;
+        private final String DB_PARAMETER;
 
         EventType(String db_name) {
-            DB_NAME = db_name;
+            DB_PARAMETER = db_name;
         }
 
-        public String getDB_NAME() {
-            return DB_NAME;
+        public String getDBParameter() {
+            return DB_PARAMETER;
         }
     }
 }
