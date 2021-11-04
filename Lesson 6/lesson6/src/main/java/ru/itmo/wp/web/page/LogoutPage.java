@@ -1,7 +1,6 @@
 package ru.itmo.wp.web.page;
 
 import ru.itmo.wp.model.service.UserService;
-import ru.itmo.wp.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -10,10 +9,15 @@ import java.util.Map;
 public class LogoutPage extends AbstractPage {
     private final UserService userService = new UserService();
 
+    @Override
+    protected void before(HttpServletRequest request, Map<String, Object> view) {
+        super.before(request, view);
+    }
+
     protected void action(HttpServletRequest request, Map<String, Object> view) {
         userService.logout(getUser());
 
-        setUser(null, "Good bye. Hope to see you soon!");
-        throw new RedirectException("/index");
+        setUser(null);
+        redirect("/index", "Good bye. Hope to see you soon!");
     }
 }

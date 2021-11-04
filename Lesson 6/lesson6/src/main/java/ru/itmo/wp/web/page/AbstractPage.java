@@ -3,6 +3,7 @@ package ru.itmo.wp.web.page;
 import com.google.common.base.Strings;
 import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.service.UserService;
+import ru.itmo.wp.web.exception.RedirectException;
 import ru.itmo.wp.web.exception.SessionNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,16 @@ public abstract class AbstractPage {
         // Nothing to do;
     }
 
-    private HttpSession getSession()  {
+    protected void redirect(String action, String message) {
+        setMessage(message);
+        redirect(action);
+    }
+
+    protected void redirect(String action) {
+        throw new RedirectException(action);
+    }
+
+    private HttpSession getSession() {
         if (session == null) {
             throw new SessionNotFoundException("Session not found");
         }
@@ -67,14 +77,5 @@ public abstract class AbstractPage {
         } else {
             getSession().setAttribute("user", user);
         }
-    }
-
-    protected void setUser(User user, String message) {
-        if (user == null) {
-            getSession().removeAttribute("user");
-        } else {
-            getSession().setAttribute("user", user);
-        }
-        setMessage(message);
     }
 }

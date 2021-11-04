@@ -5,7 +5,6 @@ import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.dto.TalkDto;
 import ru.itmo.wp.model.exception.ValidationException;
 import ru.itmo.wp.model.service.TalkService;
-import ru.itmo.wp.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,8 +20,7 @@ public class TalksPage extends AbstractPage {
 
         User user = getUser();
         if (user == null) {
-            setMessage("To enter Talks page please login.");
-            throw new RedirectException("/index");
+            redirect("/index", "To enter Talks page please login.");
         }
 
         view.put("users", userService.findAll());
@@ -47,7 +45,6 @@ public class TalksPage extends AbstractPage {
 
         talkService.addTalk(talk);
 
-        setMessage("Your message to " + targetLogin + " sent successfully!");
-        throw new RedirectException("/talks");
+        redirect("/talks", "Your message to " + targetLogin + " sent successfully!");
     }
 }

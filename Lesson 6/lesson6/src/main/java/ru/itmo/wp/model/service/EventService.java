@@ -9,14 +9,14 @@ public class EventService {
     private final EventRepository eventRepository = new EventRepositoryImpl();
 
     public Event addEnterEvent(User user) {
-        return addEvent(user, Event.EventType.ENTER);
+        return save(user, Event.EventType.ENTER);
     }
 
     public Event addLogoutEvent(User user) {
-        return addEvent(user, Event.EventType.LOGOUT);
+        return save(user, Event.EventType.LOGOUT);
     }
 
-    public Event addEvent(User user, Event.EventType eventType) {
+    public Event save(User user, Event.EventType eventType) {
         if (user != null && eventType != null) {
             Event event = new Event();
             event.setUserId(user.getId());

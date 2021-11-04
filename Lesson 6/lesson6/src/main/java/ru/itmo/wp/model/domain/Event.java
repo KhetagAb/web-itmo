@@ -53,14 +53,14 @@ public class Event implements WrapAble {
         ENTER("ENTER"),
         LOGOUT("LOGOUT");
 
-        private final String DB_PARAMETER;
+        private final String dbParameter;
 
-        EventType(String db_name) {
-            DB_PARAMETER = db_name;
+        EventType(String dbName) {
+            dbParameter = dbName;
         }
 
         public String getDBParameter() {
-            return DB_PARAMETER;
+            return dbParameter;
         }
     }
 }
