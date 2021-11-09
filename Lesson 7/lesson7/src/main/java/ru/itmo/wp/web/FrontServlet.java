@@ -125,16 +125,32 @@ public class FrontServlet extends HttpServlet {
             throw new NotFoundException();
         }
 
+        Method before = null;
         Method method = null;
-        for (Class<?> clazz = pageClass; method == null && clazz != null; clazz = clazz.getSuperclass()) {
-            try {
-                method = pageClass.getDeclaredMethod(route.getAction(), HttpServletRequest.class, Map.class);
-            } catch (NoSuchMethodException ignored) {
-                // No operations.
+        Method after = null;
+        Class<?>[] arguments = {HttpServletRequest.class, Map.class};
+        for (Class<?> clazz = pageClass; (before == null || method == null || after == null) && clazz != null; clazz = clazz.getSuperclass()) {
+            if (method == null) {
+                try {
+                    method = clazz.getDeclaredMethod(route.getAction(), arguments);
+                } catch (NoSuchMethodException ignored) {
+                }
+            }
+            if (before == null) {
+                try {
+                    before = clazz.getDeclaredMethod("before", arguments);
+                } catch (NoSuchMethodException ignored) {
+                }
+            }
+            if (after == null) {
+                try {
+                    after = clazz.getDeclaredMethod("after", arguments);
+                } catch (NoSuchMethodException ignored) {
+                }
             }
         }
 
-        if (method == null) {
+        if (before == null || method == null || after == null) {
             throw new NotFoundException();
         }
 
@@ -155,10 +171,9 @@ public class FrontServlet extends HttpServlet {
         putUser(request, view);
 
         try {
-            method.setAccessible(true);
-            method.invoke(page, request, view);
-        } catch (IllegalAccessException e) {
-            throw new ServletException("Unable to run action [pageClass=" + pageClass + ", method=" + method + "].", e);
+            invokeMethod(page, before, request, view);
+            invokeMethod(page, method, request, view);
+            invokeMethod(page, after, request, view);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof RedirectException) {
@@ -196,6 +211,15 @@ public class FrontServlet extends HttpServlet {
             } catch (TemplateException e) {
                 throw new ServletException("Can't render template [pageClass=" + pageClass + ", method=" + method + "].", e);
             }
+        }
+    }
+
+    private void invokeMethod(Object page, Method method, HttpServletRequest request, Map<String, Object> view) throws InvocationTargetException, ServletException {
+        try {
+            method.setAccessible(true);
+            method.invoke(page, request, view);
+        } catch (IllegalAccessException e) {
+            throw new ServletException("Unable to run action [pageClass=" + page.getClass() + ", method=" + method + "].", e);
         }
     }
 

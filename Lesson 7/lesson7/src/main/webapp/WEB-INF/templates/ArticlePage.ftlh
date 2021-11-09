@@ -14,24 +14,20 @@
                         <label for="title">Article title</label>
                     </div>
                     <div class="value">
-                        <input id="login" name="login" value="${login!}"/>
+                        <input id="title" name="title"/>
                     </div>
                 </div>
                 <div class="field">
                     <div class="name">
-                        <label for="text">Message</label>
+                        <label for="text">Text</label>
                     </div>
                     <div class="value">
                         <textarea id="text" name="text" rows="5"></textarea>
                     </div>
                 </div>
-                <#if error??>
-                    <div class="error">
-                        ${error!}
-                    </div>
-                </#if>
+                <div class="error"></div>
                 <div class="button-field">
-                    <input id="sendMessage" type="submit" value="Send message">
+                    <input id="createArticle" type="submit" value="Create">
                 </div>
             </form>
         </div>
@@ -40,11 +36,11 @@
     <script>
         $(function () {
             $(".form-box form").submit(function () {
-                const login = $(this).find("input[name='login']").val();
-                const password = $(this).find("input[name='password']").val();
+                const title = $(this).find("input[name='title']").val();
+                const text = $(this).find("textarea[name='text']").val();
                 const $error = $(this).find(".error");
 
-                ajax("POST", "enter", {login: login, password: password}, $error);
+                ajax("POST", "createArticle", {title: title, text: text}, $error);
 
                 return false;
             });

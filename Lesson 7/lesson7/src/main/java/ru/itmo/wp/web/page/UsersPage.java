@@ -8,12 +8,8 @@ import java.util.Map;
 /**
  * @noinspection unused
  */
-public class UsersPage {
+public class UsersPage extends AbstractPage {
     private final UserService userService = new UserService();
-
-    private void action(HttpServletRequest request, Map<String, Object> view) {
-        // No operations.
-    }
 
     private void findAll(HttpServletRequest request, Map<String, Object> view) {
         view.put("users", userService.findAll());

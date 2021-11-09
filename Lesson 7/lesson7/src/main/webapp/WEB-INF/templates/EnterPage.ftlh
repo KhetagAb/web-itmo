@@ -22,7 +22,7 @@
                         <label for="password">Password</label>
                     </div>
                     <div class="value">
-                        <input id="password" name="password" type="password" value="${password!}"/>
+                        <input id="password" name="password" type="password"/>
                     </div>
                 </div>
                 <div class="error"></div>

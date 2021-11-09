@@ -11,12 +11,8 @@ import java.util.Map;
 /**
  * @noinspection unused
  */
-public class RegisterPage {
+public class RegisterPage extends AbstractPage {
     private final UserService userService = new UserService();
-
-    private void action(HttpServletRequest request, Map<String, Object> view) {
-        // No operations.
-    }
 
     private void register(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         User user = new User();

@@ -11,12 +11,8 @@ import java.util.Map;
 /**
  * @noinspection unused
  */
-public class EnterPage {
+public class EnterPage extends AbstractPage {
     private final UserService userService = new UserService();
-
-    private void action(HttpServletRequest request, Map<String, Object> view) {
-        // No operations.
-    }
 
     private void enter(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         String login = request.getParameter("login");
