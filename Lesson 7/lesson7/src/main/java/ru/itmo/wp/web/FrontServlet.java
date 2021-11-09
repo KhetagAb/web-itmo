@@ -1,8 +1,11 @@
 package ru.itmo.wp.web;
 
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import freemarker.template.*;
+import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.exception.ValidationException;
+import ru.itmo.wp.web.annotation.Json;
 import ru.itmo.wp.web.exception.NotFoundException;
 import ru.itmo.wp.web.exception.RedirectException;
 import ru.itmo.wp.web.page.IndexPage;
@@ -22,9 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FrontServlet extends HttpServlet {
-    private static final String BASE_PAGE_PACKAGE = FrontServlet.class.getName().substring(
-            0, FrontServlet.class.getName().length() - FrontServlet.class.getSimpleName().length()
-    ) + "page";
+    private static final String BASE_PAGE_PACKAGE = FrontServlet.class.getName().substring(0,
+            FrontServlet.class.getName().length() - FrontServlet.class.getSimpleName().length()) + "page";
+
+    private static final String APPLICATION_JSON_MIME_TYPE = "application/json";
 
     private Configuration sourceFreemarkerConfiguration;
     private Configuration targetFreemarkerConfiguration;
@@ -118,37 +122,25 @@ public class FrontServlet extends HttpServlet {
         try {
             pageClass = Class.forName(route.getClassName());
         } catch (ClassNotFoundException e) {
-            throw new NotFoundException("Session not found");
+            throw new NotFoundException();
         }
 
-        Method before = null;
         Method method = null;
-        Method after = null;
-        Class<?>[] arguments = {HttpServletRequest.class, Map.class};
-        for (Class<?> clazz = pageClass; (before == null || method == null || after == null) && clazz != null; clazz = clazz.getSuperclass()) {
-            if (method == null) {
-                try {
-                    method = clazz.getDeclaredMethod(route.getAction(), arguments);
-                } catch (NoSuchMethodException ignored) {
-                }
-            }
-            if (before == null) {
-                try {
-                    before = clazz.getDeclaredMethod("before", arguments);
-                } catch (NoSuchMethodException ignored) {
-                }
-            }
-            if (after == null) {
-                try {
-                    after = clazz.getDeclaredMethod("after", arguments);
-                } catch (NoSuchMethodException ignored) {
-                }
+        for (Class<?> clazz = pageClass; method == null && clazz != null; clazz = clazz.getSuperclass()) {
+            try {
+                method = pageClass.getDeclaredMethod(route.getAction(), HttpServletRequest.class, Map.class);
+            } catch (NoSuchMethodException ignored) {
+                // No operations.
             }
         }
 
-        if (before == null || method == null || after == null) {
-            throw new NotFoundException("Session not found");
+        if (method == null) {
+            throw new NotFoundException();
         }
+
+        String acceptRequestHeader = request.getHeader("Accept");
+        boolean json = method.getAnnotation(Json.class) != null
+                || (acceptRequestHeader != null && acceptRequestHeader.startsWith(APPLICATION_JSON_MIME_TYPE));
 
         Object page;
         try {
@@ -158,17 +150,25 @@ public class FrontServlet extends HttpServlet {
             throw new ServletException("Can't create page [pageClass=" + pageClass + "].", e);
         }
 
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         Map<String, Object> view = new HashMap<>();
+        putUser(request, view);
 
         try {
-            invokeMethod(page, before, request, view);
-            invokeMethod(page, method, request, view);
-            invokeMethod(page, after, request, view);
+            method.setAccessible(true);
+            method.invoke(page, request, view);
+        } catch (IllegalAccessException e) {
+            throw new ServletException("Unable to run action [pageClass=" + pageClass + ", method=" + method + "].", e);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
             if (cause instanceof RedirectException) {
                 RedirectException redirectException = (RedirectException) cause;
-                response.sendRedirect(redirectException.getLocation());
+                if (json) {
+                    view.put("redirect", redirectException.getLocation());
+                    writeJson(response, view);
+                } else {
+                    response.sendRedirect(redirectException.getLocation());
+                }
                 return;
             } else if (cause instanceof ValidationException) {
                 ValidationException validationException = (ValidationException) cause;
@@ -186,23 +186,28 @@ public class FrontServlet extends HttpServlet {
             }
         }
 
-        Template template = newTemplate(pageClass.getSimpleName() + ".ftlh");
-
-        response.setContentType("text/html");
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        try {
-            template.process(view, response.getWriter());
-        } catch (TemplateException e) {
-            throw new ServletException("Can't render template [pageClass=" + pageClass + ", method=" + method + "].", e);
+        if (json) {
+            writeJson(response, view);
+        } else {
+            Template template = newTemplate(pageClass.getSimpleName() + ".ftlh");
+            response.setContentType("text/html");
+            try {
+                template.process(view, response.getWriter());
+            } catch (TemplateException e) {
+                throw new ServletException("Can't render template [pageClass=" + pageClass + ", method=" + method + "].", e);
+            }
         }
     }
 
-    private void invokeMethod(Object page, Method method, HttpServletRequest request, Map<String, Object> view) throws InvocationTargetException, ServletException {
-        try {
-            method.setAccessible(true);
-            method.invoke(page, request, view);
-        } catch (IllegalAccessException e) {
-            throw new ServletException("Unable to run action [pageClass=" + page.getClass() + ", method=" + method + "].", e);
+    private void writeJson(HttpServletResponse response, Map<String, Object> view) throws IOException {
+        response.setContentType(APPLICATION_JSON_MIME_TYPE);
+        response.getWriter().print(new Gson().toJson(view));
+    }
+
+    private void putUser(HttpServletRequest request, Map<String, Object> view) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user != null) {
+            view.put("user", user);
         }
     }
 
@@ -231,14 +236,6 @@ public class FrontServlet extends HttpServlet {
             );
         }
 
-        private String getClassName() {
-            return className;
-        }
-
-        private String getAction() {
-            return action;
-        }
-
         private static Route newRoute(HttpServletRequest request) {
             String uri = request.getRequestURI();
 
@@ -262,6 +259,14 @@ public class FrontServlet extends HttpServlet {
             }
 
             return new Route(className.toString(), action);
+        }
+
+        private String getClassName() {
+            return className;
+        }
+
+        private String getAction() {
+            return action;
         }
     }
 }
