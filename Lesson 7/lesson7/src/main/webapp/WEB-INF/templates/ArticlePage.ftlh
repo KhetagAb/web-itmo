@@ -11,7 +11,7 @@
                 <input type="hidden" name="action" value="createArticle"/>
                 <div class="field">
                     <div class="name">
-                        <label for="title">Article title</label>
+                        <label for="title">Title</label>
                     </div>
                     <div class="value">
                         <input id="title" name="title"/>
@@ -40,7 +40,7 @@
                 const text = $(this).find("textarea[name='text']").val();
                 const $error = $(this).find(".error");
 
-                ajax("POST", "createArticle", {title: title, text: text}, $error);
+                sendFormJson("createArticle", $error, {title: title, text: text});
 
                 return false;
             });

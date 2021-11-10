@@ -37,7 +37,7 @@
                 const password = $(this).find("input[name='password']").val();
                 const $error = $(this).find(".error");
 
-                ajax("POST", "register", {login: login, password: password}, $error);
+                sendFormJson("register", $error, {login: login, password: password});
 
                 return false;
             });

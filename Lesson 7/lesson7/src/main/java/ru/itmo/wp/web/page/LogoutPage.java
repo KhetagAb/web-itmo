@@ -9,7 +9,7 @@ import java.util.Map;
 public class LogoutPage extends AbstractPage {
     @Override
     protected void action(HttpServletRequest request, Map<String, Object> view) {
-        getSession().removeAttribute("user");
+        setUser(null);
 
         redirect("/index", "Good bye. Hope to see you soon!");
     }

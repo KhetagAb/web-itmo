@@ -1,0 +1,78 @@
+main article {
+    margin-bottom: 1rem;
+}
+
+main article:last-child {
+    margin-bottom: 0
+}
+
+
+main article p {
+    margin: .5rem;
+}
+
+main article .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--article-title-color);
+}
+
+main article .information {
+    padding-top: .3rem;
+    color: gray;
+}
+
+main article .body {
+    border-left: 4px solid var(--border-color);
+    padding-left: 1rem;
+}
+
+main article .attachment {
+    color: gray;
+    font-size: .7rem;
+    padding: 0;
+    margin-bottom: .3rem;
+}
+
+main article .attachment li {
+    list-style: none;
+    background: url("../img/paperclip-16x16.png") no-repeat top left;
+    min-height: calc(16px + .3rem);
+    padding-left: calc(16px + .5rem);
+}
+
+main article .footer {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+
+    padding: .3rem;
+}
+
+main article .footer {
+    overflow: hidden;
+}
+
+main article .footer img {
+    vertical-align: middle;
+}
+
+main article .footer .left img {
+    height: 1.5rem;
+}
+
+main article .footer .left {
+    color: green;
+    font-weight: bold;
+
+    display: inline-block;
+}
+
+main article .footer .right img {
+    height: 1rem;
+}
+
+main article .footer .right {
+    display: inline-block;
+    float: right;
+    margin-top: .2rem;
+}
