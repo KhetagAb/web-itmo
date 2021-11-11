@@ -4,7 +4,7 @@ import ru.itmo.wp.model.domain.User;
 
 import java.util.List;
 
-public interface UserRepository {
+public interface UserRepository extends AbstractRepository<User> {
     User find(long id);
 
     User findByLogin(String login);

@@ -1,14 +1,25 @@
 package ru.itmo.wp.model.domain;
 
-import java.io.Serializable;
-import java.util.Date;
+import ru.itmo.wp.model.repository.wrapper.WrapAble;
 
-public class Article implements Serializable {
+import java.util.Date;
+import java.util.Map;
+
+public class Article implements WrapAble {
     private long id;
     private long userId;
     private String title;
     private String text;
+    private boolean hidden;
     private Date creationTime;
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
 
     public long getId() {
         return id;
@@ -48,5 +59,13 @@ public class Article implements Serializable {
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
+    }
+
+    @Override
+    public Map<String, Object> unwrap() {
+        return Map.of("userId", userId,
+                "title", title,
+                "text", text,
+                "isHidden", hidden);
     }
 }

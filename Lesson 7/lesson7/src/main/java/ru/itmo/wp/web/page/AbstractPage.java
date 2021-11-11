@@ -63,6 +63,14 @@ public abstract class AbstractPage {
         }
     }
 
+    protected User getAuthorizedUser() {
+        User user = getUser();
+        if (user == null) {
+            redirect("/index", "You must be login");
+        }
+        return user;
+    }
+
     protected User getUser() {
         return (User) getSession().getAttribute("user");
     }

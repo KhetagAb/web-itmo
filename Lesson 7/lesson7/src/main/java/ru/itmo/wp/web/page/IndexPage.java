@@ -9,7 +9,9 @@ import java.util.Map;
  * @noinspection unused
  */
 public class IndexPage extends AbstractPage {
+    private final ArticleService articleService = new ArticleService();
+
     private void findAll(HttpServletRequest request, Map<String, Object> view) {
-        view.put("articles", new ArticleService().findAll());
+        view.put("articles", articleService.findAllByHiddenOrderedByCreationTime(false));
     }
 }

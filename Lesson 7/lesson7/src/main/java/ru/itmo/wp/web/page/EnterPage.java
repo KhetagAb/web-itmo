@@ -19,13 +19,10 @@ public class EnterPage extends AbstractPage {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
-        User user = userService.validateAndFindByLoginAndPassword(login, password);
+        userService.validateEnter(login, password);
+        User user = userService.enter(login, password);
         setUser(user);
 
         redirect("/index", "Hello, " + user.getLogin());
-    }
-
-    private void findAll(HttpServletRequest request, Map<String, Object> view) {
-        view.put("articles", articleService.findAll());
     }
 }

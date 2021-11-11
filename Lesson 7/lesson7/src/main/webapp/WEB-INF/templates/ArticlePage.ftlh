@@ -27,7 +27,7 @@
                 </div>
                 <div class="error"></div>
                 <div class="button-field">
-                    <input id="createArticle" type="submit" value="Create">
+                    <input id="createArticle" type="submit" name="create-button" value="Create">
                 </div>
             </form>
         </div>
@@ -40,7 +40,7 @@
                 const text = $(this).find("textarea[name='text']").val();
                 const $error = $(this).find(".error");
 
-                sendFormJson("createArticle", $error, {title: title, text: text});
+                sendRedirectFormJson("createArticle", $error, {title: title, text: text});
 
                 return false;
             });

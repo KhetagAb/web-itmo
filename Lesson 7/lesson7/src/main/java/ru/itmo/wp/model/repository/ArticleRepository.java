@@ -4,10 +4,12 @@ import ru.itmo.wp.model.domain.Article;
 
 import java.util.List;
 
-public interface ArticleRepository {
-    Article find(long id);
+public interface ArticleRepository extends AbstractRepository<Article> {
+    Article findById(long id);
 
-    Article save(Article article);
+    List<Article> findAllByHiddenOrderedByCreationTime(boolean isHidden);
 
-    List<Article> findAll();
+    List<Article> findAllByUserId(long id);
+
+    Article update(Article element);
 }

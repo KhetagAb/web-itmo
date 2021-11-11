@@ -37,7 +37,7 @@
                 const password = $(this).find("input[name='password']").val();
                 const $error = $(this).find(".error");
 
-                sendFormJson("register", $error, {login: login, password: password});
+                sendRedirectFormJson("register", $error, {login: login, password: password});
 
                 return false;
             });

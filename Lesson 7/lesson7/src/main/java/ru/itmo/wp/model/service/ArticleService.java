@@ -12,7 +12,7 @@ import java.util.List;
 public class ArticleService {
     private final ArticleRepository articleRepository = new ArticleRepositoryImpl();
 
-    public void validateCreateArticle(String title, String text) throws ValidationException {
+    public void validateSave(String title, String text) throws ValidationException {
         if (Strings.isNullOrEmpty(title)) {
             throw new ValidationException("Title is required");
         }
@@ -31,21 +31,35 @@ public class ArticleService {
         }
     }
 
-    public Article createArticle(User user, String title, String text) {
-        if (user != null) {
-            Article article = new Article();
-
-            article.setUserId(user.getId());
-            article.setTitle(title);
-            article.setText(text);
-
-            return articleRepository.save(article);
-        } else {
-            throw new IllegalStateException("To create article user must be not null");
-        }
+    public Article save(User user, String title, String text) {
+        return save(user, title, text, true);
     }
 
-    public List<Article> findAll() {
-        return articleRepository.findAll();
+    public Article save(User user, String title, String text, boolean isHidden) {
+        Article article = new Article();
+
+        article.setUserId(user.getId());
+        article.setTitle(title);
+        article.setText(text);
+        article.setHidden(isHidden);
+
+        return articleRepository.save(article);
+    }
+
+    public List<Article> findAllByHiddenOrderedByCreationTime(boolean isHidden) {
+        return articleRepository.findAllByHiddenOrderedByCreationTime(isHidden);
+    }
+
+    public List<Article> findAllByUser(User user) {
+        return articleRepository.findAllByUserId(user.getId());
+    }
+
+    public Article switchVisibility(Article article) {
+        article.setHidden(!article.isHidden());
+        return articleRepository.update(article);
+    }
+
+    public Article findById(long id) {
+        return articleRepository.findById(id);
     }
 }

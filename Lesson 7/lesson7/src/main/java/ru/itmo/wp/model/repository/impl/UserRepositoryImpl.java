@@ -1,54 +1,46 @@
 package ru.itmo.wp.model.repository.impl;
 
-import ru.itmo.wp.model.database.DatabaseUtils;
 import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.exception.RepositoryException;
 import ru.itmo.wp.model.repository.UserRepository;
+import ru.itmo.wp.model.repository.wrapper.UserWrapper;
+import ru.itmo.wp.model.repository.wrapper.Wrapper;
 
-import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepositoryImpl implements UserRepository {
-    private final DataSource DATA_SOURCE = DatabaseUtils.getDataSource();
+public class UserRepositoryImpl extends AbstractRepositoryImpl<User> implements UserRepository {
+    private static final Wrapper<User> USER_WRAPPER = new UserWrapper();
+    private static final String TABLE_NAME = "User";
+
+    @Override
+    protected String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    protected Wrapper<User> getElementWrapper() {
+        return USER_WRAPPER;
+    }
 
     @Override
     public User find(long id) {
-        try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE id=?")) {
-                statement.setLong(1, id);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    return toUser(statement.getMetaData(), resultSet);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RepositoryException("Can't find User.", e);
-        }
+        return findById(id);
     }
 
     @Override
     public User findByLogin(String login) {
-        try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE login=?")) {
-                statement.setString(1, login);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    return toUser(statement.getMetaData(), resultSet);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RepositoryException("Can't find User.", e);
-        }
+        return findByAllArguments(new String[]{"login"}, new Object[]{login});
     }
 
     @Override
-    public User findByLoginAndPasswordSha(String login, String passwordSha) {
+    public User findByLoginAndPasswordSha(String token, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM User WHERE login=? AND passwordSha=?")) {
-                statement.setString(1, login);
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE login=? AND passwordSha=?")) {
+                statement.setString(1, token);
                 statement.setString(2, passwordSha);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    return toUser(statement.getMetaData(), resultSet);
+                    return USER_WRAPPER.wrap(statement.getMetaData(), resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -56,53 +48,10 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM User ORDER BY id DESC")) {
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    User user;
-                    while ((user = toUser(statement.getMetaData(), resultSet)) != null) {
-                        users.add(user);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            throw new RepositoryException("Can't find User.", e);
-        }
-        return users;
-    }
-
-    private User toUser(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {
-        if (!resultSet.next()) {
-            return null;
-        }
-
-        User user = new User();
-        for (int i = 1; i <= metaData.getColumnCount(); i++) {
-            switch (metaData.getColumnName(i)) {
-                case "id":
-                    user.setId(resultSet.getLong(i));
-                    break;
-                case "login":
-                    user.setLogin(resultSet.getString(i));
-                    break;
-                case "creationTime":
-                    user.setCreationTime(resultSet.getTimestamp(i));
-                    break;
-                default:
-                    // No operations.
-            }
-        }
-
-        return user;
-    }
-
-    @Override
     public void save(User user, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("INSERT INTO `User` (`login`, `passwordSha`, `creationTime`) VALUES (?, ?, NOW())", Statement.RETURN_GENERATED_KEYS)) {
+            String sqlRequest = getSaveSqlRequest(List.of("login", "passwordSha"));
+            try (PreparedStatement statement = connection.prepareStatement(sqlRequest, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getLogin());
                 statement.setString(2, passwordSha);
                 if (statement.executeUpdate() != 1) {
@@ -111,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
                     ResultSet generatedKeys = statement.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         user.setId(generatedKeys.getLong(1));
-                        user.setCreationTime(find(user.getId()).getCreationTime());
+                        user.setCreationTime(this.findById(user.getId()).getCreationTime());
                     } else {
                         throw new RepositoryException("Can't save User [no autogenerated fields].");
                     }
@@ -120,5 +69,10 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException e) {
             throw new RepositoryException("Can't save User.", e);
         }
+    }
+
+    @Override
+    public User save(User element) {
+        throw new RepositoryException("Saving user without password is unsupported operation");
     }
 }

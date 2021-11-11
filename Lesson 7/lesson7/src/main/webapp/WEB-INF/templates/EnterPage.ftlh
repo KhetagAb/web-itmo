@@ -40,7 +40,7 @@
                 const password = $(this).find("input[name='password']").val();
                 const $error = $(this).find(".error");
 
-                sendFormJson("enter", $error, {login: login, password: password});
+                sendRedirectFormJson("enter", $error, {login: login, password: password});
 
                 return false;
             });
