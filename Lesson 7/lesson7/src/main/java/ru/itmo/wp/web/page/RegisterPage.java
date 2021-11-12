@@ -21,6 +21,8 @@ public class RegisterPage extends AbstractPage {
         userService.validateRegistration(user, password);
         userService.register(user, password);
 
+        setUser(userService.enter(user.getLogin(), password));
+
         redirect("/index", "You are successfully registered!");
     }
 }

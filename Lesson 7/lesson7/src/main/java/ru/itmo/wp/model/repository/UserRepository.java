@@ -13,5 +13,5 @@ public interface UserRepository extends AbstractRepository<User> {
 
     List<User> findAll();
 
-    void save(User user, String passwordSha);
+    User save(User user, String passwordSha);
 }

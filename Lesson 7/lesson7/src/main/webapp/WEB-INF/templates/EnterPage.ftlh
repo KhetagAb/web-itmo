@@ -40,7 +40,16 @@
                 const password = $(this).find("input[name='password']").val();
                 const $error = $(this).find(".error");
 
-                sendRedirectFormJson("enter", $error, {login: login, password: password});
+                ajaxJson(
+                    "POST",
+                    "enter",
+                    () => {
+                    },
+                    err => {
+                        $error.text(err);
+                    },
+                    {login: login, password: password}
+                );
 
                 return false;
             });

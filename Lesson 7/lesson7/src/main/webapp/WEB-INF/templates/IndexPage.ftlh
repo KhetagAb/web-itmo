@@ -37,7 +37,7 @@
 
             ajaxJson("POST",
                 "findAll",
-                response => {
+                function (response) {
                     let articles = response["articles"];
                     if (articles !== undefined && articles.length > 0) {
                         response["articles"].forEach(function (article) {
@@ -53,14 +53,16 @@
                     }
 
                     $(".users tr").click(function () {
-                        ajaxJson("POST",
-                            "findUser",
-                            response => notify(response["user"].creationTime),
+                            ajaxJson("POST",
+                                "findUser",
+                                response => notify(response["user"].creationTime),
+                                err => error(err),
                                 {userId: $(this).attr("data-userId")}
                             );
                         }
                     );
-                }
+                },
+                err => error(err)
             );
         })
     </script>

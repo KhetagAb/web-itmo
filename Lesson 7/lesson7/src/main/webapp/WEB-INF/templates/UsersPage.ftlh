@@ -44,7 +44,7 @@
 
             ajaxJson("POST",
                 "findAll",
-                response => {
+                function (response) {
                     let users = response["users"];
                     if (users !== undefined && users.length) {
                         response["users"].forEach(function (user) {
@@ -69,6 +69,7 @@
                             ajaxJson("POST",
                                 "findUser",
                                 response => notify(response["user"].creationTime),
+                                err => error(err),
                                 {userId: $(this).attr("data-userId")}
                             );
                         }
@@ -84,11 +85,15 @@
                                     $admin.find(".is-admin").text(isAdmin ? "true" : "false");
                                     $admin.find("a").text(isAdmin ? "disable" : "enable")
                                 },
+                                function (error) {
+                                    notify(error);
+                                },
                                 {userId: $(this).parent().attr("data-userId")}
                             )
                         }
                     );
-                }
+                },
+                err => error(err)
             );
         })
     </script>

@@ -21,8 +21,8 @@ public class UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final ArticleService articleService = new ArticleService();
 
-    public void register(User user, String password) {
-        userRepository.save(user, getPasswordSha(password));
+    public User register(User user, String password) {
+        return userRepository.save(user, getPasswordSha(password));
     }
 
     public User enter(String login, String password) throws ValidationException {
@@ -58,6 +58,14 @@ public class UserService {
         }
         if (password.length() > 12) {
             throw new ValidationException("Password can't be longer than 12 characters");
+        }
+    }
+
+    public long validateUserId(String userId) throws ValidationException {
+        try {
+            return Long.parseLong(userId);
+        } catch (NumberFormatException ignored) {
+            throw new ValidationException("Invalid user id: " + userId);
         }
     }
 

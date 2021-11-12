@@ -12,34 +12,7 @@ window.error = function (message) {
     });
 }
 
-window.sendRedirectFormJson = function (action, $error, parameters, url = "") {
-    sendFormJson(
-        action,
-        parameters,
-        response => {
-            location.href = response["redirect"]
-        },
-        response => {
-            $error.text(response["error"]);
-        },
-        url);
-}
-
-window.sendFormJson = function (action, parameters, onSuccess, onError, url = "") {
-    ajaxJson("POST",
-        action,
-        response => {
-            if (response["error"]) {
-                onError(response)
-            } else {
-                onSuccess(response);
-            }
-        },
-        parameters,
-        url);
-}
-
-window.ajaxJson = function (type, action, onSuccess, parameters = {}, url = "") {
+window.ajaxJson = function (type, action, onSuccess, onError, parameters = {}, url = "") {
     parameters["action"] = action;
 
     $.ajax({
@@ -47,6 +20,14 @@ window.ajaxJson = function (type, action, onSuccess, parameters = {}, url = "") 
         url: url,
         dataType: "json",
         data: parameters,
-        success: onSuccess
+        success: function (response) {
+            if (response["error"]) {
+                onError(response["error"])
+            } else {
+                onSuccess(response);
+                if (response["redirect"])
+                    location.href = response["redirect"]
+            }
+        },
     });
 }

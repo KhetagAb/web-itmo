@@ -31,6 +31,14 @@ public class ArticleService {
         }
     }
 
+    public long validateArticleId(String articleId) throws ValidationException {
+        try {
+            return Long.parseLong(articleId);
+        } catch (NumberFormatException ignored) {
+            throw new ValidationException("Invalid article id: " + articleId);
+        }
+    }
+
     public Article save(User user, String title, String text) {
         return save(user, title, text, true);
     }

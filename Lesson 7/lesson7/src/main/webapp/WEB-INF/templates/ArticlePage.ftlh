@@ -40,7 +40,16 @@
                 const text = $(this).find("textarea[name='text']").val();
                 const $error = $(this).find(".error");
 
-                sendRedirectFormJson("createArticle", $error, {title: title, text: text});
+                ajaxJson(
+                    "POST",
+                    "createArticle",
+                    () => {
+                    },
+                    err => {
+                        $error.text(err);
+                    },
+                    {title: title, text: text}
+                );
 
                 return false;
             });

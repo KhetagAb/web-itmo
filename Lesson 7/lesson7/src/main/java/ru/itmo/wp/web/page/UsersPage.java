@@ -23,18 +23,13 @@ public class UsersPage extends AbstractPage {
     private void switchAdminRoot(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         User authedUser = getAuthorizedUser();
         if (authedUser.isAdmin()) {
-            String userId = request.getParameter("userId");
-            try {
-                long userTargetId = Long.parseLong(userId);
-                view.put("user", userService.switchAdminRoot(userTargetId));
-                if (userTargetId == authedUser.getId()) {
-                    throw new ValidationException("mds");
-                }
-            } catch (NumberFormatException ignored) {
-                throw new ValidationException("Invalid user id:" + userId);
+            long userId = userService.validateUserId(request.getParameter("userId"));
+            view.put("user", userService.switchAdminRoot(userId));
+            if (userId == authedUser.getId()) {
+                redirect("/users", "You have changed your admin roots");
             }
         } else {
-            redirect("/users", "You must be admin");
+            redirect("/users", "You must have admin roots");
         }
     }
 
@@ -43,13 +38,8 @@ public class UsersPage extends AbstractPage {
     }
 
     private void findUser(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
-        String userId = request.getParameter("userId");
+        long userId = userService.validateUserId(request.getParameter("userId"));
 
-        try {
-            long id = Long.parseLong(userId);
-            view.put("user", userService.findById(id));
-        } catch (NumberFormatException ignored) {
-            throw new ValidationException("Invalid user id:" + userId);
-        }
+        view.put("user", userService.findById(userId));
     }
 }

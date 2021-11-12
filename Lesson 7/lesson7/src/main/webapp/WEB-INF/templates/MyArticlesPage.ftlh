@@ -47,14 +47,13 @@
 
                 button.val("Wait...")
                 button.prop('disabled', true);
-                sendFormJson("switchVisibility", {articleId: articleId},
+                ajaxJson("POST", "switchVisibility",
                     function () {
                         button.val(switchTo);
                         button.prop('disabled', false);
                     },
-                    function () {
-                        this.error("Cannot change the article visibility");
-                    }
+                    err => error(err),
+                    {articleId: articleId}
                 );
 
                 return false;

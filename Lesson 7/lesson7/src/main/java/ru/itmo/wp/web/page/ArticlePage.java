@@ -25,6 +25,6 @@ public class ArticlePage extends AbstractPage {
         articleService.validateSave(title, text);
         articleService.save(user, title, text);
 
-        redirect("/index", "Article created");
+        redirect("/index", "Article has been successfully created");
     }
 }

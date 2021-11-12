@@ -11,21 +11,16 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 public abstract class AbstractPage {
+    private final UserService userService = new UserService();
     private HttpSession session = null;
-    private UserService userService = new UserService();
 
     protected void before(HttpServletRequest request, Map<String, Object> view) {
         session = request.getSession();
 
-        User user = getUser();
-        if (user != null) {
-            view.put("user", user);
-        }
-
         String message = getMessage();
         if (!Strings.isNullOrEmpty(message)) {
             view.put("message", message);
-            request.getSession().removeAttribute("message");
+            setMessage(null);
         }
     }
 
@@ -53,11 +48,11 @@ public abstract class AbstractPage {
         return session;
     }
 
-    protected String getMessage() {
+    private String getMessage() {
         return (String) getSession().getAttribute("message");
     }
 
-    protected void setMessage(String message) {
+    private void setMessage(String message) {
         if (message == null) {
             getSession().removeAttribute("message");
         } else {
@@ -69,7 +64,7 @@ public abstract class AbstractPage {
         User user = getUser();
 
         if (user == null) {
-            redirect("/index", "You must be authored");
+            redirect("/index", "You need to login first");
         }
         return user;
     }
