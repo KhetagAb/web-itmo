@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="error" type="java.lang.String" -->
 <#-- @ftlvariable name="user" type="ru.itmo.wp.model.domain.User" -->
 <#-- @ftlvariable name="message" type="java.lang.String" -->
 <#macro page>
@@ -71,6 +72,11 @@
         $(function () {
             <#if message??>
             notify("${message?js_string}");
+            </#if>
+        })
+        $(function () {
+            <#if error??>
+            error("${error?js_string}");
             </#if>
         })
     </script>

@@ -17,6 +17,11 @@ public abstract class AbstractPage {
     protected void before(HttpServletRequest request, Map<String, Object> view) {
         session = request.getSession();
 
+        User user = getUser();
+        if (user != null) {
+            view.put("user", user);
+        }
+
         String message = getMessage();
         if (!Strings.isNullOrEmpty(message)) {
             view.put("message", message);

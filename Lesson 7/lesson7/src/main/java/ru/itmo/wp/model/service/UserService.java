@@ -61,30 +61,27 @@ public class UserService {
         }
     }
 
-    public long validateUserId(String userId) throws ValidationException {
+    public User validateUserId(String userId) throws ValidationException {
         try {
-            return Long.parseLong(userId);
+            User user = findById(Long.parseLong(userId));
+            if (user == null) {
+                throw new ValidationException("Cannot find user with id: " + userId);
+            } else {
+                return user;
+            }
         } catch (NumberFormatException ignored) {
             throw new ValidationException("Invalid user id: " + userId);
         }
     }
 
-    public User switchAdminRoot(long userId) throws ValidationException {
-        User user = findById(userId);
-
-        if (user == null) {
-            throw new ValidationException("Cannot find user with id: " + userId);
-        } else {
-            user.setAdmin(!user.isAdmin());
-            return userRepository.update(user);
-        }
+    public User switchAdminRoot(User user) {
+        user.setAdmin(!user.isAdmin());
+        return userRepository.update(user);
     }
 
-    public Article switchArticleVisibility(long userId, long articleId) throws ValidationException {
-        User user = findById(userId);
-        Article article = articleService.findById(articleId);
-        if (article == null || user == null || article.getUserId() != user.getId()) {
-            throw new ValidationException("User with id " + userId + " don't have access to article " + articleId);
+    public Article switchArticleVisibility(User user, Article article) throws ValidationException {
+        if (article.getUserId() != user.getId()) {
+            throw new ValidationException("User with id " + user.getId() + " don't have access to article " + article.getId());
         }
         return articleService.switchVisibility(article);
     }

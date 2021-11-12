@@ -3,7 +3,6 @@ package ru.itmo.wp.web;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import freemarker.template.*;
-import ru.itmo.wp.model.domain.User;
 import ru.itmo.wp.model.exception.ValidationException;
 import ru.itmo.wp.web.annotation.Json;
 import ru.itmo.wp.web.exception.NotFoundException;
@@ -168,7 +167,6 @@ public class FrontServlet extends HttpServlet {
 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         Map<String, Object> view = new HashMap<>();
-        putUser(request, view);
 
         try {
             invokeMethod(page, before, request, view);
@@ -226,13 +224,6 @@ public class FrontServlet extends HttpServlet {
     private void writeJson(HttpServletResponse response, Map<String, Object> view) throws IOException {
         response.setContentType(APPLICATION_JSON_MIME_TYPE);
         response.getWriter().print(new Gson().toJson(view));
-    }
-
-    private void putUser(HttpServletRequest request, Map<String, Object> view) {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user != null) {
-            view.put("user", user);
-        }
     }
 
     private static final class Route {

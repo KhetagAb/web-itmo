@@ -31,9 +31,14 @@ public class ArticleService {
         }
     }
 
-    public long validateArticleId(String articleId) throws ValidationException {
+    public Article validateArticleId(String articleId) throws ValidationException {
         try {
-            return Long.parseLong(articleId);
+            Article article = findById(Long.parseLong(articleId));
+            if (article != null) {
+                return article;
+            } else {
+                throw new ValidationException("Cannot find article with id: " + articleId);
+            }
         } catch (NumberFormatException ignored) {
             throw new ValidationException("Invalid article id: " + articleId);
         }

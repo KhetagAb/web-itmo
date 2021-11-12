@@ -35,9 +35,9 @@
             const $noData = $(".articles .noData");
             $noData.text("Loading...");
 
-            ajaxJson("POST",
-                "findAll",
-                function (response) {
+            ajaxPostRequestJson({
+                action: "findAll",
+                onSuccess: function (response) {
                     let articles = response["articles"];
                     if (articles !== undefined && articles.length > 0) {
                         response["articles"].forEach(function (article) {
@@ -51,19 +51,20 @@
                     } else {
                         $noData.text("No articles");
                     }
-
-                    $(".users tr").click(function () {
-                            ajaxJson("POST",
-                                "findUser",
-                                response => notify(response["user"].creationTime),
-                                err => error(err),
-                                {userId: $(this).attr("data-userId")}
-                            );
-                        }
-                    );
-                },
-                err => error(err)
-            );
+                    // $(".users tr").click(function () {
+                    //     ajaxPostRequestJson({
+                    //         act
+                    //     })
+                    //         ajaxJson("POST",
+                    //             "findUser",
+                    //             response => notify(response["user"].creationTime),
+                    //             err => error(err),
+                    //             {userId: $(this).attr("data-userId")}
+                    //         );
+                    //     }
+                    // );
+                }
+            });
         })
     </script>
 </@c.page>

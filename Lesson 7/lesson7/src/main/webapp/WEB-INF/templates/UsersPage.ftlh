@@ -42,9 +42,9 @@
             const $noData = $(".users .noData");
             $noData.find("td").text("Loading...");
 
-            ajaxJson("POST",
-                "findAll",
-                function (response) {
+            ajaxPostRequestJson({
+                action: "findAll",
+                onSuccess: function (response) {
                     let users = response["users"];
                     if (users !== undefined && users.length) {
                         response["users"].forEach(function (user) {
@@ -66,35 +66,30 @@
                     }
 
                     $(".users tr .user-id").click(function () {
-                            ajaxJson("POST",
-                                "findUser",
-                                response => notify(response["user"].creationTime),
-                                err => error(err),
-                                {userId: $(this).attr("data-userId")}
-                            );
-                        }
-                    );
+                        ajaxPostRequestJson({
+                            action: "findUser",
+                            onSuccess: response => notify(response["foundUser"].creationTime),
+                            parameters: {userId: $(this).attr("data-userId")}
+                        })
+                    });
 
                     $(".users tr .user-admin").find("a").click(function () {
                             const $admin = $(this).parent();
 
-                            ajaxJson("POST",
-                                "switchAdminRoot",
-                                function (response) {
-                                    const isAdmin = response["user"].isAdmin;
+                            ajaxPostRequestJson({
+                                action: "switchAdminRoot",
+                                onSuccess: response => {
+                                    const isAdmin = response["switchedUser"].isAdmin;
                                     $admin.find(".is-admin").text(isAdmin ? "true" : "false");
                                     $admin.find("a").text(isAdmin ? "disable" : "enable")
                                 },
-                                function (error) {
-                                    notify(error);
-                                },
-                                {userId: $(this).parent().attr("data-userId")}
-                            )
+                                parameters: {userId: $(this).parent().attr("data-userId")}
+                            });
                         }
                     );
                 },
-                err => error(err)
-            );
+                url: "/users"
+            });
         })
     </script>
 </@c.page>

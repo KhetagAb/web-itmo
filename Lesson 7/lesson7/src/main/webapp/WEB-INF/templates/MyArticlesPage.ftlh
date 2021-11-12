@@ -47,14 +47,14 @@
 
                 button.val("Wait...")
                 button.prop('disabled', true);
-                ajaxJson("POST", "switchVisibility",
-                    function () {
+                ajaxPostRequestJson({
+                    action: "switchArticleVisibility",
+                    onSuccess: () => {
                         button.val(switchTo);
                         button.prop('disabled', false);
                     },
-                    err => error(err),
-                    {articleId: articleId}
-                );
+                    parameters: {articleId: articleId}
+                })
 
                 return false;
             });

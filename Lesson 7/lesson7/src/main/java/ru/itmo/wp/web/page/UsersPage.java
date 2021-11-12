@@ -16,16 +16,14 @@ public class UsersPage extends AbstractPage {
     @Override
     protected void before(HttpServletRequest request, Map<String, Object> view) {
         super.before(request, view);
-
-        view.put("authedUser", getUser());
     }
 
     private void switchAdminRoot(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         User authedUser = getAuthorizedUser();
         if (authedUser.isAdmin()) {
-            long userId = userService.validateUserId(request.getParameter("userId"));
-            view.put("user", userService.switchAdminRoot(userId));
-            if (userId == authedUser.getId()) {
+            User user = userService.validateUserId(request.getParameter("userId"));
+            view.put("switchedUser", userService.switchAdminRoot(user));
+            if (user.getId() == authedUser.getId()) {
                 redirect("/users", "You have changed your admin roots");
             }
         } else {
@@ -38,8 +36,8 @@ public class UsersPage extends AbstractPage {
     }
 
     private void findUser(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
-        long userId = userService.validateUserId(request.getParameter("userId"));
+        User user = userService.validateUserId(request.getParameter("userId"));
 
-        view.put("user", userService.findById(userId));
+        view.put("foundUser", user);
     }
 }

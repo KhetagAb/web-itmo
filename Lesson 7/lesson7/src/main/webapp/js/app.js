@@ -12,7 +12,28 @@ window.error = function (message) {
     });
 }
 
-window.ajaxJson = function (type, action, onSuccess, onError, parameters = {}, url = "") {
+window.ajaxFormJson = function (action, $error, parameters, url = "") {
+    ajaxPostRequestJson({
+        action: action,
+        onError: err => $error.text(err),
+        parameters: parameters,
+        url: url
+    });
+}
+
+window.ajaxPostRequestJson = function (
+    {
+        action = "action",
+        onSuccess = () => {
+        },
+        onError = (err) => error(err),
+        parameters = {},
+        url = ""
+    } = {}) {
+    ajaxJson("POST", action, onSuccess, onError, parameters, url)
+}
+
+window.ajaxJson = function (type, action, onSuccess, onError, parameters, url) {
     parameters["action"] = action;
 
     $.ajax({

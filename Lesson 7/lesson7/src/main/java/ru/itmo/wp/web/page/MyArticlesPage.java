@@ -21,8 +21,8 @@ public class MyArticlesPage extends AbstractPage {
         view.put("articles", articleService.findAllByUser(user));
     }
 
-    private Article switchVisibility(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
-        long articleId = articleService.validateArticleId(request.getParameter("articleId"));
-        return userService.switchArticleVisibility(getAuthorizedUser().getId(), articleId);
+    private Article switchArticleVisibility(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
+        Article article = articleService.validateArticleId(request.getParameter("articleId"));
+        return userService.switchArticleVisibility(getAuthorizedUser(), article);
     }
 }

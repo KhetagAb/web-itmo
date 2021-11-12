@@ -40,16 +40,7 @@
                 const password = $(this).find("input[name='password']").val();
                 const $error = $(this).find(".error");
 
-                ajaxJson(
-                    "POST",
-                    "enter",
-                    () => {
-                    },
-                    err => {
-                        $error.text(err);
-                    },
-                    {login: login, password: password}
-                );
+                ajaxFormJson("enter", $error, {login: login, password: password})
 
                 return false;
             });

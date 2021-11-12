@@ -40,16 +40,7 @@
                 const text = $(this).find("textarea[name='text']").val();
                 const $error = $(this).find(".error");
 
-                ajaxJson(
-                    "POST",
-                    "createArticle",
-                    () => {
-                    },
-                    err => {
-                        $error.text(err);
-                    },
-                    {title: title, text: text}
-                );
+                ajaxFormJson("createArticle", $error, {title: title, text: text})
 
                 return false;
             });
