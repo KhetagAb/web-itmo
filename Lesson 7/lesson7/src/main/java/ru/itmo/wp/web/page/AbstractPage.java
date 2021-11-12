@@ -2,6 +2,7 @@ package ru.itmo.wp.web.page;
 
 import com.google.common.base.Strings;
 import ru.itmo.wp.model.domain.User;
+import ru.itmo.wp.model.service.UserService;
 import ru.itmo.wp.web.exception.RedirectException;
 import ru.itmo.wp.web.exception.SessionNotFoundException;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 
 public abstract class AbstractPage {
     private HttpSession session = null;
+    private UserService userService = new UserService();
 
     protected void before(HttpServletRequest request, Map<String, Object> view) {
         session = request.getSession();
@@ -65,14 +67,20 @@ public abstract class AbstractPage {
 
     protected User getAuthorizedUser() {
         User user = getUser();
+
         if (user == null) {
-            redirect("/index", "You must be login");
+            redirect("/index", "You must be authored");
         }
         return user;
     }
 
     protected User getUser() {
-        return (User) getSession().getAttribute("user");
+        User user = (User) getSession().getAttribute("user");
+        if (user != null) {
+            user = userService.findById(user.getId());
+            setUser(user);
+        }
+        return user;
     }
 
     protected void setUser(User user) {

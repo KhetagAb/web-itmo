@@ -76,3 +76,7 @@ main article .footer .right {
     float: right;
     margin-top: .2rem;
 }
+
+main article .footer .right .date {
+    display: inline;
+}

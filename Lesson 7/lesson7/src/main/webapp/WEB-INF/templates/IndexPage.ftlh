@@ -21,7 +21,7 @@
                     </div>
                     <div class="right">
                         <img src="img/date_16x16.png" title="Publish Time" alt="Publish Time"/>
-                        2 days ago
+                        <div class="date">2 days ago</div>
                         <img src="img/comments_16x16.png" title="Comments" alt="Comments"/>
                         <a href="#">68</a>
                     </div>
@@ -45,7 +45,7 @@
                             const $article = $($(".articles template").prop("content")).clone();
                             $article.find(".title").text(article["title"]);
                             $article.find(".body p").text(article["text"]);
-                            // $article.find("tr").attr("data-userId", article["id"]);
+                            $article.find(".footer .right .date ").text(article["creationTime"]);
                             $(".articles").append($article);
                         });
                     } else {
@@ -53,9 +53,9 @@
                     }
 
                     $(".users tr").click(function () {
-                            ajaxJson("POST",
-                                "findUser",
-                                response => notify(response["user"].creationTime),
+                        ajaxJson("POST",
+                            "findUser",
+                            response => notify(response["user"].creationTime),
                                 {userId: $(this).attr("data-userId")}
                             );
                         }

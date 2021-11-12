@@ -61,13 +61,24 @@ public class UserService {
         }
     }
 
-    public Article switchArticleVisibility(User user, long articleId) throws ValidationException {
-        Article article = articleService.findById(articleId);
-        if (article == null || article.getUserId() != user.getId()) {
-            throw new ValidationException("User with id " + user.getId() + " don't have access to article " + articleId);
+    public User switchAdminRoot(long userId) throws ValidationException {
+        User user = findById(userId);
+
+        if (user == null) {
+            throw new ValidationException("Cannot find user with id: " + userId);
+        } else {
+            user.setAdmin(!user.isAdmin());
+            return userRepository.update(user);
         }
-        article = articleService.switchVisibility(article);
-        return article;
+    }
+
+    public Article switchArticleVisibility(long userId, long articleId) throws ValidationException {
+        User user = findById(userId);
+        Article article = articleService.findById(articleId);
+        if (article == null || user == null || article.getUserId() != user.getId()) {
+            throw new ValidationException("User with id " + userId + " don't have access to article " + articleId);
+        }
+        return articleService.switchVisibility(article);
     }
 
     public User findById(long id) {

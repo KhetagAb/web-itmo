@@ -50,10 +50,11 @@ public class UserRepositoryImpl extends AbstractRepositoryImpl<User> implements 
 
     public void save(User user, String passwordSha) {
         try (Connection connection = DATA_SOURCE.getConnection()) {
-            String sqlRequest = getSaveSqlRequest(List.of("login", "passwordSha"));
+            String sqlRequest = getSaveSqlRequest(List.of("login", "admin", "passwordSha"));
             try (PreparedStatement statement = connection.prepareStatement(sqlRequest, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getLogin());
-                statement.setString(2, passwordSha);
+                statement.setBoolean(2, user.isAdmin());
+                statement.setString(3, passwordSha);
                 if (statement.executeUpdate() != 1) {
                     throw new RepositoryException("Can't save User.");
                 } else {

@@ -23,9 +23,8 @@ public class MyArticlesPage extends AbstractPage {
 
     private Article switchVisibility(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         String articleId = request.getParameter("articleId");
-
         try {
-            return userService.switchArticleVisibility(getAuthorizedUser(), Long.parseLong(articleId));
+            return userService.switchArticleVisibility(getAuthorizedUser().getId(), Long.parseLong(articleId));
         } catch (NumberFormatException ignored) {
             throw new ValidationException("Invalid article id:" + articleId);
         }
