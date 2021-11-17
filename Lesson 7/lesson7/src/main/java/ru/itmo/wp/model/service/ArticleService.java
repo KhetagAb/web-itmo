@@ -70,8 +70,8 @@ public class ArticleService {
         return articleRepository.findAllByUserId(user.getId());
     }
 
-    public Article switchVisibility(Article article) {
-        article.setHidden(!article.isHidden());
+    public Article switchVisibility(Article article, boolean isHidden) {
+        article.setHidden(isHidden);
         return articleRepository.update(article);
     }
 

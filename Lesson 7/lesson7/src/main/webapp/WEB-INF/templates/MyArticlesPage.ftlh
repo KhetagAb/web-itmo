@@ -45,15 +45,17 @@
                 const articleId = $(this).find("input[name='articleId']").val();
                 const switchTo = (button.val() === "Hide" ? "Show" : "Hide");
 
+                const visibility = button.val().toLowerCase();
+
                 button.val("Wait...")
                 button.prop('disabled', true);
                 ajaxPostRequestJson({
-                    action: "switchArticleVisibility",
+                    action: "setArticleVisibility",
                     onSuccess: () => {
                         button.val(switchTo);
                         button.prop('disabled', false);
                     },
-                    parameters: {articleId: articleId}
+                    parameters: {articleId: articleId, visibility: visibility}
                 })
 
                 return false;

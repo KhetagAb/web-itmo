@@ -37,12 +37,12 @@ public abstract class AbstractPage {
         // Nothing to do;
     }
 
-    protected void redirect(String action, String message) {
+    protected Object redirect(String action, String message) {
         setMessage(message);
-        redirect(action);
+        return redirect(action);
     }
 
-    protected void redirect(String action) {
+    protected Object redirect(String action) {
         throw new RedirectException(action);
     }
 

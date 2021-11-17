@@ -74,16 +74,16 @@ public class UserService {
         }
     }
 
-    public User switchAdminRoot(User user) {
-        user.setAdmin(!user.isAdmin());
+    public User setAdminRoot(User user, boolean isAdmin) {
+        user.setAdmin(isAdmin);
         return userRepository.update(user);
     }
 
-    public Article switchArticleVisibility(User user, Article article) throws ValidationException {
+    public Article setArticleVisibility(User user, Article article, boolean isHidden) throws ValidationException {
         if (article.getUserId() != user.getId()) {
             throw new ValidationException("User with id " + user.getId() + " don't have access to article " + article.getId());
         }
-        return articleService.switchVisibility(article);
+        return articleService.switchVisibility(article, isHidden);
     }
 
     public User findById(long id) {

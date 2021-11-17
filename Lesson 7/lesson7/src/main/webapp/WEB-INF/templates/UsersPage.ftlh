@@ -75,15 +75,19 @@
 
                     $(".users tr .user-admin").find("a").click(function () {
                             const $admin = $(this).parent();
+                            const $isAdmin = $admin.find(".is-admin").text();
 
                             ajaxPostRequestJson({
-                                action: "switchAdminRoot",
+                                action: "setAdminRoot",
                                 onSuccess: response => {
                                     const isAdmin = response["switchedUser"].isAdmin;
                                     $admin.find(".is-admin").text(isAdmin ? "true" : "false");
                                     $admin.find("a").text(isAdmin ? "disable" : "enable")
                                 },
-                                parameters: {userId: $(this).parent().attr("data-userId")}
+                                parameters: {
+                                    userId: $(this).parent().attr("data-userId"),
+                                    root: ($isAdmin === "false" ? "admin" : "user")
+                                }
                             });
                         }
                     );

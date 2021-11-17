@@ -18,13 +18,16 @@ public class UsersPage extends AbstractPage {
         super.before(request, view);
     }
 
-    private void switchAdminRoot(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
+    private void setAdminRoot(HttpServletRequest request, Map<String, Object> view) throws ValidationException {
         User authedUser = getAuthorizedUser();
         if (authedUser.isAdmin()) {
             User user = userService.validateUserId(request.getParameter("userId"));
-            view.put("switchedUser", userService.switchAdminRoot(user));
-            if (user.getId() == authedUser.getId()) {
-                redirect("/users", "You have changed your admin roots");
+            String root = request.getParameter("root");
+            if (root != null && (root.equals("admin") || root.equals("user"))) {
+                view.put("switchedUser", userService.setAdminRoot(user, root.equals("admin")));
+                if (user.getId() == authedUser.getId()) {
+                    redirect("/users", "You have changed your admin roots");
+                }
             }
         } else {
             redirect("/users", "You must have admin roots");
