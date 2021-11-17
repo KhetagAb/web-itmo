@@ -3,11 +3,13 @@ package ru.itmo.wp.model.service;
 import com.google.common.base.Strings;
 import ru.itmo.wp.model.domain.Article;
 import ru.itmo.wp.model.domain.User;
+import ru.itmo.wp.model.dto.ArticleDto;
 import ru.itmo.wp.model.exception.ValidationException;
 import ru.itmo.wp.model.repository.ArticleRepository;
 import ru.itmo.wp.model.repository.impl.ArticleRepositoryImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArticleService {
     private final ArticleRepository articleRepository = new ArticleRepositoryImpl();
@@ -59,8 +61,9 @@ public class ArticleService {
         return articleRepository.save(article);
     }
 
-    public List<Article> findAllByHiddenOrderedByCreationTime(boolean isHidden) {
-        return articleRepository.findAllByHiddenOrderedByCreationTime(isHidden);
+    public List<ArticleDto> findAllByHiddenOrderedByCreationTime(boolean isHidden) {
+        List<Article> allByHiddenOrderedByCreationTime = articleRepository.findAllByHiddenOrderedByCreationTime(isHidden);
+        return allByHiddenOrderedByCreationTime.stream().map(ArticleDto::new).collect(Collectors.toList());
     }
 
     public List<Article> findAllByUser(User user) {

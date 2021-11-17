@@ -8,6 +8,7 @@
         <template>
             <article>
                 <div class="title"></div>
+                <div class="information"></div>
                 <div class="body"><p></p></div>
                 <ul class="attachment">
                     <li>Announcement of <a href="#">Article</a></li>
@@ -44,6 +45,7 @@
                             $noData.hide();
                             const $article = $($(".articles template").prop("content")).clone();
                             $article.find(".title").text(article["title"]);
+                            $article.find(".information").text("by " + article["login"]);
                             $article.find(".body p").text(article["text"]);
                             $article.find(".footer .right .date ").text(article["creationTime"]);
                             $(".articles").append($article);
@@ -51,18 +53,6 @@
                     } else {
                         $noData.text("No articles");
                     }
-                    // $(".users tr").click(function () {
-                    //     ajaxPostRequestJson({
-                    //         act
-                    //     })
-                    //         ajaxJson("POST",
-                    //             "findUser",
-                    //             response => notify(response["user"].creationTime),
-                    //             err => error(err),
-                    //             {userId: $(this).attr("data-userId")}
-                    //         );
-                    //     }
-                    // );
                 }
             });
         })

@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="users" type="ru.itmo.wp.model.domain.User[]" -->
-<#-- @ftlvariable name="authedUser" type="ru.itmo.wp.model.domain.User" -->
+<#-- @ftlvariable name="user" type="ru.itmo.wp.model.domain.User" -->
 <#import "commons.ftlh" as c>
 
 <@c.page>
@@ -10,7 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Login</th>
-                <#if authedUser?has_content && authedUser.isAdmin()>
+                <#if user?has_content && user.isAdmin()>
                     <th>Admin</th>
                 </#if>
             </tr>
@@ -25,7 +25,7 @@
                 <tr class="user">
                     <td class="user-id"></td>
                     <td class="user-login"></td>
-                    <#if authedUser?has_content && authedUser.isAdmin()>
+                    <#if user?has_content && user.isAdmin()>
                         <td class="user-admin">
                             <div class="is-admin">true</div>
                             <a href="#">enable</a>
@@ -54,7 +54,7 @@
                             $tr.find(".user-login").text(user["login"]);
                             $tr.find("td").attr("data-userId", user["id"]);
 
-                            <#if authedUser?has_content && authedUser.isAdmin()>
+                            <#if user?has_content && user.isAdmin()>
                             $tr.find(".user-admin .is-admin").text(user["isAdmin"])
                             $tr.find(".user-admin a").text(!user["isAdmin"] ? "enable" : "disable")
                             </#if>
