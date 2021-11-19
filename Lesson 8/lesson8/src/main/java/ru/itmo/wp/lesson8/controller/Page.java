@@ -2,10 +2,13 @@ package ru.itmo.wp.lesson8.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import ru.itmo.wp.lesson8.domain.dto.NoticeDto;
 import ru.itmo.wp.lesson8.domain.model.User;
+import ru.itmo.wp.lesson8.service.NoticeService;
 import ru.itmo.wp.lesson8.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class Page {
     private static final String USER_ID_SESSION_KEY = "userId";
@@ -13,6 +16,9 @@ public class Page {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NoticeService noticeService;
 
     @ModelAttribute("user")
     public User getUser(HttpSession httpSession) {
@@ -24,6 +30,11 @@ public class Page {
         String message = (String) httpSession.getAttribute(MESSAGE_SESSION_KEY);
         httpSession.removeAttribute(MESSAGE_SESSION_KEY);
         return message;
+    }
+
+    @ModelAttribute("notices")
+    public List<NoticeDto> getNotices(HttpSession httpSession) {
+        return noticeService.findAll();
     }
 
     protected void setUser(HttpSession httpSession, User user) {

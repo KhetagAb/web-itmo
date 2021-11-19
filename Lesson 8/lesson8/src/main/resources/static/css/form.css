@@ -5,6 +5,7 @@
     border-top-left-radius: var(--border-radius);
     width: 30rem;
     margin: 0 auto;
+    display: flow-root;
 }
 
 .form-box .header {

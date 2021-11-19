@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="notices" type="ru.itmo.wp.lesson8.domain.model.Notice[]" -->
 <#import "/spring.ftl" as spring>
 
 <#macro page>
@@ -37,24 +38,25 @@
             <ul>
                 <li><a href="<@spring.url '/'/>">Home</a></li>
                 <li><a href="<@spring.url '/users/all'/>">Users</a></li>
+                <li><a href="<@spring.url '/notice'/>">Notice</a></li>
             </ul>
         </nav>
     </header>
     <div class="middle">
         <aside>
-            <section>
-                <div class="header">
-                    Pay attention
-                </div>
-                <div class="body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate ducimus enim facere impedit
-                    nobis,
-                    nulla placeat quam suscipit unde voluptatibus.
-                </div>
-                <div class="footer">
-                    <a href="#">View all</a>
-                </div>
-            </section>
+            <#list notices?reverse as notice>
+                <section>
+                    <div class="header">
+                        Notice
+                    </div>
+                    <div class="body">
+                        ${notice.content}
+                    </div>
+                    <div class="footer">
+                        <a href="#">View all</a>
+                    </div>
+                </section>
+            </#list>
         </aside>
         <main>
             <#nested/>
