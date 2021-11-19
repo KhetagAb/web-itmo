@@ -1,0 +1,32 @@
+main .user_block {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: .4rem;
+
+    overflow: hidden;
+}
+
+main .user_block .info_block {
+    display: inline-block;
+}
+
+main .user_block .info_block .name {
+    font-size: 1.3rem;
+}
+
+main .user_block img {
+    float: right;
+    display: block;
+}
+
+main .users_switch_controllers {
+    font-size: 1.5rem;
+}
+
+main .users_switch_controllers a {
+    text-decoration: none
+}
+
+main .users_switch_controllers a.dis {
+    color: gray;
+}

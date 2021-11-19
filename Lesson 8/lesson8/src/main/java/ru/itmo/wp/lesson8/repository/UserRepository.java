@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itmo.wp.lesson8.domain.User;
+import ru.itmo.wp.lesson8.domain.model.User;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package ru.itmo.wp.lesson8.service;
 
 import org.springframework.stereotype.Service;
-import ru.itmo.wp.lesson8.domain.User;
+import ru.itmo.wp.lesson8.domain.model.User;
 import ru.itmo.wp.lesson8.form.UserCredentials;
 import ru.itmo.wp.lesson8.repository.UserRepository;
 

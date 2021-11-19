@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/style.css'/>">
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/form.css'/>">
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/datatable.css'/>">
+        <link rel="stylesheet" type="text/css" href="<@spring.url '/css/user_block.css'/>">
         <script src="<@spring.url '/js/jquery-3.4.1.min.js'/>"></script>
         <script src="<@spring.url '/js/notify.min.js'/>"></script>
         <script src="<@spring.url '/js/app.js'/>"></script>

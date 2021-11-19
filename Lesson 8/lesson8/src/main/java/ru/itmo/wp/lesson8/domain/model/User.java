@@ -1,4 +1,4 @@
-package ru.itmo.wp.lesson8.domain;
+package ru.itmo.wp.lesson8.domain.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 

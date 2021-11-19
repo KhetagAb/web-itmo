@@ -2,7 +2,7 @@ package ru.itmo.wp.lesson8.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import ru.itmo.wp.lesson8.domain.User;
+import ru.itmo.wp.lesson8.domain.model.User;
 import ru.itmo.wp.lesson8.service.UserService;
 
 import javax.servlet.http.HttpSession;
