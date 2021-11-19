@@ -8,13 +8,14 @@
             <tr>
                 <th>Id</th>
                 <th>Login</th>
+                <th>Activity</th>
                 <th>Created</th>
             </tr>
             </thead>
             <tbody>
             <#if users?size==0>
                 <tr class="noData">
-                    <td colspan="3">
+                    <td colspan="4">
                         No data
                     </td>
                 </tr>
@@ -23,6 +24,13 @@
                     <tr>
                         <td class="id">${user.id}</td>
                         <td class="login">${user.login}</td>
+                        <td>
+                            <form action="/users" method="post" class="article-switch-hidden">
+                                <input type="hidden" name="userLogin" value="${user.login}"/>
+                                <input type="submit" name="activity"
+                                       value="<#if user.isActivity()>Disable<#else>Enable</#if>">
+                            </form>
+                        </td>
                         <td class="creationTime">${user.creationTime}</td>
                     </tr>
                 </#list>

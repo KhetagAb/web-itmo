@@ -25,6 +25,8 @@ public class User {
     @Pattern(regexp = "[a-z]+", message = "Only lowercase latin letters expected")
     private String login;
 
+    private boolean activity = false;
+
     @CreationTimestamp
     private Date creationTime;
 
@@ -42,6 +44,14 @@ public class User {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public boolean isActivity() {
+        return activity;
+    }
+
+    public void setActivity(boolean activity) {
+        this.activity = activity;
     }
 
     public Date getCreationTime() {

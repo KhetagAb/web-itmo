@@ -38,4 +38,10 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAllByOrderByIdDesc();
     }
+
+    public User setActivity(String userLogin, boolean activity) {
+        User user = userRepository.findByLogin(userLogin);
+        user.setActivity(activity);
+        return userRepository.save(user);
+    }
 }
