@@ -46,9 +46,14 @@ window.ajaxJson = function (type, action, onSuccess, onError, parameters, url) {
                 onError(response["error"])
             } else {
                 onSuccess(response);
-                if (response["redirect"])
+                if (response["redirect"]) {
                     location.href = response["redirect"]
+                }
             }
         },
+        error: response => {
+            if (response["redirect"])
+                location.href = response["redirect"]
+        }
     });
 }

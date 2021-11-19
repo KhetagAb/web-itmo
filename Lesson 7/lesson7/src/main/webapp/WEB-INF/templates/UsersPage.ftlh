@@ -79,10 +79,12 @@
 
                             ajaxPostRequestJson({
                                 action: "setAdminRoot",
-                                onSuccess: response => {
-                                    const isAdmin = response["switchedUser"].isAdmin;
-                                    $admin.find(".is-admin").text(isAdmin ? "true" : "false");
-                                    $admin.find("a").text(isAdmin ? "disable" : "enable")
+                                onSuccess: function (response) {
+                                    if (response["switchedUser"]) {
+                                        const isAdmin = response["switchedUser"].isAdmin;
+                                        $admin.find(".is-admin").text(isAdmin ? "true" : "false");
+                                        $admin.find("a").text(isAdmin ? "disable" : "enable")
+                                    }
                                 },
                                 parameters: {
                                     userId: $(this).parent().attr("data-userId"),
