@@ -1,9 +1,12 @@
-package ru.itmo.wp.lesson8.service;
+package ru.itmo.wp.service;
 
 import org.springframework.stereotype.Service;
-import ru.itmo.wp.lesson8.domain.model.User;
-import ru.itmo.wp.lesson8.form.UserCredentials;
-import ru.itmo.wp.lesson8.repository.UserRepository;
+import ru.itmo.wp.domain.Post;
+import ru.itmo.wp.domain.Role;
+import ru.itmo.wp.domain.User;
+import ru.itmo.wp.form.UserCredentials;
+import ru.itmo.wp.repository.RoleRepository;
+import ru.itmo.wp.repository.UserRepository;
 
 import java.util.List;
 
@@ -11,15 +14,25 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    /** @noinspection FieldCanBeLocal, unused */
+    private final RoleRepository roleRepository;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+
+        this.roleRepository = roleRepository;
+        for (Role.Name name : Role.Name.values()) {
+            if (roleRepository.countByName(name) == 0) {
+                roleRepository.save(new Role(name));
+            }
+        }
     }
 
     public User register(UserCredentials userCredentials) {
         User user = new User();
         user.setLogin(userCredentials.getLogin());
         userRepository.save(user);
-        userRepository.updatePassword(user.getId(), userCredentials.getLogin(), userCredentials.getPassword());
+        userRepository.updatePasswordSha(user.getId(), userCredentials.getLogin(), userCredentials.getPassword());
         return user;
     }
 
@@ -39,9 +52,8 @@ public class UserService {
         return userRepository.findAllByOrderByIdDesc();
     }
 
-    public User setActivity(String userLogin, boolean isActive) {
-        User user = userRepository.findByLogin(userLogin);
-        user.setIsActive(isActive);
-        return userRepository.save(user);
+    public void writePost(User user, Post post) {
+        user.addPost(post);
+        userRepository.save(user);
     }
 }

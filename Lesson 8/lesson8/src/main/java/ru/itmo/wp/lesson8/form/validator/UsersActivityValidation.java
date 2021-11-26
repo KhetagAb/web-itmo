@@ -24,9 +24,9 @@ public class UsersActivityValidation implements Validator {
             if (userService.isLoginVacant(activityFrom.getUserLogin())) {
                 errors.rejectValue("userLogin", "userLogin.is-invalid", "cannot find such login");
             }
-            String activity = activityFrom.getActivity();
+            String activity = activityFrom.getActive();
             if (activity == null || (!activity.equals("Enable") && !activity.equals("Disable"))) {
-                errors.rejectValue("activity", "activity.is-invalid", "invalid activity");
+                errors.rejectValue("activity", "activity.is-invalid", "invalid active value");
             }
         }
     }

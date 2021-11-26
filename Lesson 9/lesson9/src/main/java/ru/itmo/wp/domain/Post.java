@@ -1,31 +1,35 @@
-package ru.itmo.wp.lesson8.domain.model;
+package ru.itmo.wp.domain;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+/** @noinspection unused*/
 @Entity
-@Table(
-        indexes = @Index(columnList = "creationTime"),
-        uniqueConstraints = @UniqueConstraint(columnNames = "login")
-)
-public class User {
+@Table
+public class Post {
     @Id
     @GeneratedValue
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @NotNull
     @NotEmpty
-    @Size(min = 2, max = 16)
-    @Pattern(regexp = "[a-z]+", message = "Only lowercase latin letters expected")
-    private String login;
+    @Size(min = 1, max = 60)
+    private String title;
 
-    private boolean isActive = false;
+    @NotNull
+    @NotEmpty
+    @Size(min = 1, max = 65000)
+    @Lob
+    private String text;
 
     @CreationTimestamp
     private Date creationTime;
@@ -38,20 +42,28 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public User getUser() {
+        return user;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public boolean isIsActive() {
-        return isActive;
+    public String getTitle() {
+        return title;
     }
 
-    public void setIsActive(boolean activity) {
-        this.isActive = activity;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Date getCreationTime() {
@@ -62,4 +74,3 @@ public class User {
         this.creationTime = creationTime;
     }
 }
-

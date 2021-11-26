@@ -10,7 +10,6 @@ import ru.itmo.wp.lesson8.domain.model.User;
 import ru.itmo.wp.lesson8.form.UsersActivity;
 import ru.itmo.wp.lesson8.service.UserService;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -22,7 +21,7 @@ public class UsersPage extends Page {
     }
 
     @GetMapping("/user/{id}")
-    public String user(HttpSession session, Model model, @PathVariable("id") String parameterId) {
+    public String user(Model model, @PathVariable("id") String parameterId) {
         User user = null;
         try {
             long id = Long.parseLong(parameterId);
@@ -42,7 +41,7 @@ public class UsersPage extends Page {
 
     @PostMapping("/users")
     public String usersPost(@Valid @ModelAttribute("usersForm") UsersActivity usersActivity) {
-        userService.setActivity(usersActivity.getUserLogin(), usersActivity.getActivity().equals("Enable"));
+        userService.setActivity(usersActivity.getUserLogin(), usersActivity.getActive().equals("Enable"));
         return "redirect:/users/all";
     }
 

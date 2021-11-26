@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="users" type="ru.itmo.wp.domain.User[]" -->
 <#import "commons.ftlh" as c>
 
 <@c.page>
@@ -8,14 +9,14 @@
             <tr>
                 <th>Id</th>
                 <th>Login</th>
-                <th>Activity</th>
+                <th>Roles</th>
                 <th>Created</th>
             </tr>
             </thead>
             <tbody>
             <#if users?size==0>
                 <tr class="noData">
-                    <td colspan="4">
+                    <td colspan="3">
                         No data
                     </td>
                 </tr>
@@ -24,12 +25,10 @@
                     <tr>
                         <td class="id">${user.id}</td>
                         <td class="login">${user.login}</td>
-                        <td>
-                            <form action="/users" method="post" class="article-switch-hidden">
-                                <input type="hidden" name="userLogin" value="${user.login}"/>
-                                <input type="submit" name="active"
-                                       value="<#if user.isIsActive()>Disable<#else>Enable</#if>">
-                            </form>
+                        <td class="roles">
+                            <#list user.roles as role>
+                                ${role.name}<#if role_has_next>,</#if>
+                            </#list>
                         </td>
                         <td class="creationTime">${user.creationTime}</td>
                     </tr>

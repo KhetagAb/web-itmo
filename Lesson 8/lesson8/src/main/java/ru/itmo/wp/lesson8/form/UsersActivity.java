@@ -10,7 +10,7 @@ public class UsersActivity {
     @Pattern(regexp = "[a-z]+", message = "Only lowercase latin letters expected")
     private String userLogin;
 
-    private String activity;
+    private String active;
 
     public String getUserLogin() {
         return userLogin;
@@ -20,11 +20,11 @@ public class UsersActivity {
         this.userLogin = userLogin;
     }
 
-    public String getActivity() {
-        return activity;
+    public String getActive() {
+        return active;
     }
 
-    public void setActivity(String activity) {
-        this.activity = activity;
+    public void setActive(String active) {
+        this.active = active;
     }
 }

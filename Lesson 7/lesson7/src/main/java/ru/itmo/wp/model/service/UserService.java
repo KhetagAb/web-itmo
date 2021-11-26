@@ -83,7 +83,7 @@ public class UserService {
         if (article.getUserId() != user.getId()) {
             throw new ValidationException("User with id " + user.getId() + " don't have access to article " + article.getId());
         }
-        return articleService.switchVisibility(article, isHidden);
+        return articleService.setArticleVisibility(article, isHidden);
     }
 
     public User findById(long id) {
