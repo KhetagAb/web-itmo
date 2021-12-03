@@ -11,9 +11,11 @@ import java.util.Optional;
 
 @Service
 public class PostService {
+    private final TagService tagService;
     private final PostRepository postRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(TagService tagService, PostRepository postRepository) {
+        this.tagService = tagService;
         this.postRepository = postRepository;
     }
 

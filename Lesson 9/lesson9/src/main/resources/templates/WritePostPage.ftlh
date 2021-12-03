@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="post" type="ru.itmo.wp.domain.Post" -->
+<#-- @ftlvariable name="post" type="ru.itmo.wp.form.PostDto" -->
 
 <#import "/spring.ftl" as spring>
 <#import "commons.ftlh" as c>
@@ -23,9 +23,9 @@
                         <label for="title">Tags</label>
                     </div>
                     <div class="value">
-                        <input autofocus id="tags" name="title" value="${post.tag-line!}"/>
+                        <input autofocus id="tags" name="tagsLine" value="${post.tagsLine!}"/>
                     </div>
-                    <@c.error "post.title"/>
+                    <@c.error "post.tagsLine"/>
                 </div>
                 <div class="field">
                     <div class="name">
