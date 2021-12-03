@@ -20,6 +20,15 @@
                 </div>
                 <div class="field">
                     <div class="name">
+                        <label for="title">Tags</label>
+                    </div>
+                    <div class="value">
+                        <input autofocus id="tags" name="title" value="${post.tag-line!}"/>
+                    </div>
+                    <@c.error "post.title"/>
+                </div>
+                <div class="field">
+                    <div class="name">
                         <label for="text">Text</label>
                     </div>
                     <div class="value">

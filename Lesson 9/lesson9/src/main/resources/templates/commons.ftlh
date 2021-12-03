@@ -101,12 +101,16 @@
 <#-- @ftlvariable name="post" type="ru.itmo.wp.domain.Post" -->
     <article>
         <div class="title"><a href="/post/${post.id}">${post.title}</a></div>
-        <div class="information">By ${post.user.login}, ${post.creationTime}</div>
+        <div class="information">By ${post.user.login}</div>
         <div class="body">${post.text}</div>
-        <ul class="attachment">
-            <li>Announcement of <a href="#">Codeforces Round #510 (Div. 1)</a></li>
-            <li>Announcement of <a href="#">Codeforces Round #510 (Div. 2)</a></li>
-        </ul>
+        <div class="tags">
+            <#if post.tags?has_content>
+                <img src="<@spring.url '/img/tags.png'/>" class="tags-img" title="Tags" alt="Tags">
+            </#if>
+            <#list post.tags as tag>
+                <span>${tag.name}</span>
+            </#list>
+        </div>
         <div class="footer">
             <div class="left">
                 <img src="<@spring.url '/img/voteup.png'/>" title="Vote Up" alt="Vote Up"/>
@@ -117,7 +121,7 @@
                 <img src="<@spring.url '/img/date_16x16.png'/>" title="Publish Time" alt="Publish Time"/>
                 ${post.creationTime}
                 <img src="<@spring.url '/img/comments_16x16.png'/>" title="Comments" alt="Comments"/>
-                <a href="#">68</a>
+                <a href="/post/${post.id}">${post.getComments()?size}</a>
             </div>
         </div>
     </article>

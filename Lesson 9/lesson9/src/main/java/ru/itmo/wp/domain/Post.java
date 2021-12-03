@@ -86,6 +86,14 @@ public class Post {
         this.text = text;
     }
 
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
     public Date getCreationTime() {
         return creationTime;
     }

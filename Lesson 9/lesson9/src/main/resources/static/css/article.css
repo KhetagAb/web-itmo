@@ -16,6 +16,7 @@ main article .information {
 }
 
 main article .body {
+    margin: .5rem;
     border-left: 4px solid var(--border-color);
     padding-left: 0.75rem;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -25,17 +26,17 @@ main article .body p:last-child {
     margin: 0;
 }
 
-main article .attachment {
-    padding: 0;
-    margin: 0.5rem 0 0 0;
+main article .tags {
+    line-height: 11px;
 }
 
-main article .attachment li {
-    list-style: none;
-    padding: 0.25rem 20px;
-    margin: 0;
-    background: url("../img/paperclip-16x16.png") 0 2px no-repeat;
-    font-size: 0.75rem;
+main article .tags .tags-img {
+    vertical-align: middle;
+}
+
+main article .tags span {
+    font-size: .7rem;
+    padding: 0 .35em;
     color: #888;
 }
 
