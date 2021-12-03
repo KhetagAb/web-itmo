@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="comment" type="ru.itmo.wp.domain.Comment" -->
 <#-- @ftlvariable name="user" type="ru.itmo.wp.domain.User" -->
 <#-- @ftlvariable name="message" type="java.lang.String" -->
 <#import "/spring.ftl" as spring/>
@@ -13,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/form.css'/>">
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/datatable.css'/>">
         <link rel="stylesheet" type="text/css" href="<@spring.url '/css/article.css'/>">
+        <link rel="stylesheet" type="text/css" href="<@spring.url '/css/comment.css'/>">
         <script src="<@spring.url '/js/jquery-3.4.1.min.js'/>"></script>
         <script src="<@spring.url '/js/notify.js'/>"></script>
     </head>
@@ -87,10 +89,18 @@
     </#if>
 </#macro>
 
-<#macro post post>
+<#macro showComment comment>
+<#-- @ftlvariable name="comment" type="ru.itmo.wp.domain.Comment" -->
+    <div class="comment">
+        <div class="information">By ${comment.user.login}</div>
+        <div class="body">${comment.text}</div>
+    </div>
+</#macro>
+
+<#macro post post withComments=false>
 <#-- @ftlvariable name="post" type="ru.itmo.wp.domain.Post" -->
     <article>
-        <div class="title">${post.title}</div>
+        <div class="title"><a href="/post/${post.id}">${post.title}</a></div>
         <div class="information">By ${post.user.login}, ${post.creationTime}</div>
         <div class="body">${post.text}</div>
         <ul class="attachment">
@@ -101,14 +111,44 @@
             <div class="left">
                 <img src="<@spring.url '/img/voteup.png'/>" title="Vote Up" alt="Vote Up"/>
                 <span class="positive-score">+173</span>
-                <img src="<@spring.url 'img/votedown.png'/>" title="Vote Down" alt="Vote Down"/>
+                <img src="<@spring.url '/img/votedown.png'/>" title="Vote Down" alt="Vote Down"/>
             </div>
             <div class="right">
-                <img src="<@spring.url 'img/date_16x16.png'/>" title="Publish Time" alt="Publish Time"/>
+                <img src="<@spring.url '/img/date_16x16.png'/>" title="Publish Time" alt="Publish Time"/>
                 ${post.creationTime}
-                <img src="<@spring.url 'img/comments_16x16.png'/>" title="Comments" alt="Comments"/>
+                <img src="<@spring.url '/img/comments_16x16.png'/>" title="Comments" alt="Comments"/>
                 <a href="#">68</a>
             </div>
         </div>
     </article>
+    <#if withComments>
+        <#if user?has_content>
+            <div class="comment-form">
+                <div class="body">
+                    <form method="post" action="">
+                        <input type="hidden" name="action" value="writeComment"/>
+                        <div class="field">
+                            <div class="name">
+                                <label for="text">Text</label>
+                            </div>
+                            <div class="value">
+                                <textarea id="text" name="text"></textarea>
+                            </div>
+                            <@error "comment.text"/>
+                        </div>
+                        <div class="button-field">
+                            <input type="submit" value="Comment">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </#if>
+        <#if post.comments?has_content>
+            <#list post.comments as comment>
+                <@showComment comment=comment/>
+            </#list>
+        <#else>
+            No comments
+        </#if>
+    </#if>
 </#macro>
