@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "UsersTableUser",
+  name: "User",
   props: ["user"]
 }
 </script>

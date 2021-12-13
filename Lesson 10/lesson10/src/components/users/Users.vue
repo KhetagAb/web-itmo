@@ -10,18 +10,18 @@
       </tr>
       </thead>
       <tbody>
-        <UsersTableUser v-for="user in users" :user="user" :key="user.id"/>
+        <User v-for="user in users" :user="user" :key="user.id"/>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import UsersTableUser from "./UsersTableUser";
+import User from "./User";
 
 export default {
   name: "Users",
-  components: {UsersTableUser},
+  components: {User},
   props: ["users"]
 }
 </script>

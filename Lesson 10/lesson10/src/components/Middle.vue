@@ -2,7 +2,7 @@
     <div class="middle">
         <Sidebar :posts="viewPosts"/>
         <main>
-            <Index v-if="page === 'Index'"/>
+            <Index v-if="page === 'Index'" :posts="getPosts"/>
             <Enter v-if="page === 'Enter'"/>
             <Register v-if="page === 'Register'"/>
             <WritePost v-if="page === 'WritePost'"/>
@@ -37,11 +37,23 @@ export default {
         Sidebar,
         EditPost
     },
-    props: ["posts", "users"],
+    methods: {
+      findUserById(id) {
+        return Object.values(this.users).find(u => u.id === id);
+      }
+    },
+    props: ["posts", "users", "comments"],
     computed: {
         viewPosts: function () {
             return Object.values(this.posts).sort((a, b) => b.id - a.id).slice(0, 2);
-        }
+        },
+        getPosts: function () {
+          return Object.values(this.posts).map(post => {
+            post.userLogin = this.findUserById(post.userId).login;
+            post.comments = Object.values(this.comments).filter(c => c.postId === post.id);
+            return post;
+          });
+        },
     }, beforeCreate() {
         this.$root.$on("onChangePage", (page) => this.page = page)
     }
