@@ -7,6 +7,7 @@
             <Register v-if="page === 'Register'"/>
             <WritePost v-if="page === 'WritePost'"/>
             <EditPost v-if="page === 'EditPost'"/>
+            <Users v-if="page === 'Users'" :users="users"/>
         </main>
     </div>
 </template>
@@ -18,6 +19,7 @@ import Enter from "./page/Enter";
 import WritePost from "./page/WritePost";
 import EditPost from "./page/EditPost";
 import Register from "./page/Register";
+import Users from "./users/Users";
 
 export default {
     name: "Middle",
@@ -27,6 +29,7 @@ export default {
         }
     },
     components: {
+      Users,
       Register,
         WritePost,
         Enter,
@@ -34,7 +37,7 @@ export default {
         Sidebar,
         EditPost
     },
-    props: ["posts"],
+    props: ["posts", "users"],
     computed: {
         viewPosts: function () {
             return Object.values(this.posts).sort((a, b) => b.id - a.id).slice(0, 2);
