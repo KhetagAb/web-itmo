@@ -148,7 +148,7 @@
             </div>
         </#if>
         <#if post.comments?has_content>
-            <#list post.comments as comment>
+            <#list post.comments?reverse as comment>
                 <@showComment comment=comment/>
             </#list>
         <#else>

@@ -6,6 +6,7 @@ import ru.itmo.wp.domain.Tag;
 import ru.itmo.wp.repository.TagRepository;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -24,7 +25,7 @@ public class TagService {
             return Set.of();
         }
 
-        Set<Tag> tagSet = Arrays.stream(tagLine.split("\\s+"))
+        return Arrays.stream(tagLine.split("\\s+"))
                 .filter(Predicate.not(String::isEmpty))
                 .map(t -> {
                     t = StringUtils.capitalize(t.toLowerCase(Locale.ROOT));
@@ -38,7 +39,5 @@ public class TagService {
                     }
                 })
                 .collect(Collectors.toSet());
-
-        return tagSet;
     }
 }

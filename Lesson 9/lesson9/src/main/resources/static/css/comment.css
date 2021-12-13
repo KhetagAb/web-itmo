@@ -1,3 +1,6 @@
+main .comment {
+    margin-bottom: .5rem;
+}
 main .comment .information {
     margin-top: 0.25rem;
     font-size: 0.85rem;
@@ -13,7 +16,7 @@ main .comment .body {
 /* comment-form */
 .comment-form {
     width: 20rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0 1rem 0;
 }
 
 .comment-form .field textarea {
