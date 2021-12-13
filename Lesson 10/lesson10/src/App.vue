@@ -44,6 +44,26 @@ export default {
 
         this.$root.$on("onLogout", () => this.userId = null);
 
+        this.$root.$on("onRegister", (login, name) => {
+          if (this.userId) {
+            this.$root.$emit("onRegisterValidationError", "You have already logged in");
+          } else {
+            if (!login || !login.match(/[a-z]{3,16}/)) {
+              this.$root.$emit("onRegisterValidationError", "Login must contains 3-16 latin letters: " + login.match(/[a-z]{3,16}/));
+            } else if (Object.values(this.users).find(e => e.login === login) !== undefined) {
+              this.$root.$emit("onRegisterValidationError", "Login is already in use");
+            } else if (!name || !name.match(/[a-z]{1,32}/)) {
+              this.$root.$emit("onRegisterValidationError", "Name must contains 1-32 latin letters");
+            } else {
+              this.$root.$emit("onChangePage", "Enter");
+              const id = Math.max(...Object.keys(this.users)) + 1;
+              this.$root.$set(this.users, id, {
+                id, login, name, admin: false
+              });
+            }
+          }
+        });
+
         this.$root.$on("onWritePost", (title, text) => {
             if (this.userId) {
                 if (!title || title.length < 5) {

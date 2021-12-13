@@ -4,6 +4,7 @@
         <main>
             <Index v-if="page === 'Index'"/>
             <Enter v-if="page === 'Enter'"/>
+            <Register v-if="page === 'Register'"/>
             <WritePost v-if="page === 'WritePost'"/>
             <EditPost v-if="page === 'EditPost'"/>
         </main>
@@ -16,6 +17,7 @@ import Index from "./page/Index";
 import Enter from "./page/Enter";
 import WritePost from "./page/WritePost";
 import EditPost from "./page/EditPost";
+import Register from "./page/Register";
 
 export default {
     name: "Middle",
@@ -25,6 +27,7 @@ export default {
         }
     },
     components: {
+      Register,
         WritePost,
         Enter,
         Index,

@@ -16,7 +16,7 @@
             <template v-else>
                 <a href="#" @click.prevent="changePage('Enter')">Enter</a>
                 |
-                <a href="#">Register</a>
+                <a href="#" @click.prevent="changePage('Register')">Register</a>
             </template>
         </div>
         <nav>

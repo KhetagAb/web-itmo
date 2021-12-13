@@ -1,8 +1,8 @@
 <template>
     <div class="enter form-box">
-        <div class="header">Enter</div>
+        <div class="header">Register</div>
         <div class="body">
-            <form @submit.prevent="onEnter">
+            <form @submit.prevent="onRegister">
                 <div class="field">
                     <div class="name">
                         <label for="login">Login</label>
@@ -13,15 +13,15 @@
                 </div>
                 <div class="field">
                     <div class="name">
-                        <label for="password">Password</label>
+                        <label for="name">Name</label>
                     </div>
                     <div class="value">
-                        <input id="password" name="password" type="password" v-model="password"/>
+                        <input id="name" name="name" v-model="name"/>
                     </div>
                 </div>
                 <div class="field error">{{ error }}</div>
                 <div class="button-field">
-                    <input type="submit" value="Enter">
+                    <input type="submit" value="Register">
                 </div>
             </form>
         </div>
@@ -30,21 +30,21 @@
 
 <script>
 export default {
-    name: "Enter",
+    name: "Register",
     data: function () {
         return {
             login: "",
-            password: "",
+            name: "",
             error: ""
         }
     },
     methods: {
-        onEnter: function () {
-            this.$root.$emit("onEnter", this.login, this.password);
+        onRegister: function () {
+            this.$root.$emit("onRegister", this.login, this.name);
         }
     },
     beforeCreate() {
-        this.$root.$on("onEnterValidationError", (error) => this.error = error);
+        this.$root.$on("onRegisterValidationError", (error) => this.error = error);
     }
 }
 </script>
