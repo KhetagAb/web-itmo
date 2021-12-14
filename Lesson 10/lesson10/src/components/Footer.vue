@@ -5,7 +5,8 @@
         | Users: {{ usersCount }}
       </template>
       <template v-if="postsCount">
-        | Posts: {{ postsCount }}
+        |
+        Posts: {{ postsCount }}
       </template>
     </footer>
 </template>

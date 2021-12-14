@@ -7,7 +7,7 @@
       {{ post.text }}
     </div>
     <div class="footer">
-      <a href="#">View all</a>
+      <a href="#" @click.prevent="postPage(post)">View all</a>
     </div>
   </section>
 </template>
@@ -15,7 +15,12 @@
 <script>
 export default {
   name: "SidebarPost",
-  props: ["post"]
+  methods: {
+    postPage: function (post) {
+      this.$root.$emit("onPostPage", post);
+    },
+  },
+  props: ["post"],
 }
 </script>
 

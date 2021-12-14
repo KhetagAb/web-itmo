@@ -1,6 +1,6 @@
 <template>
   <article>
-    <div class="title"><a href="#">
+    <div class="title"><a href="#" @click.prevent="postPage(post)">
       {{ post.title }}
     </a></div>
     <div class="information">By
@@ -34,6 +34,9 @@ export default {
   name: "Post",
   components: {Comment},
   methods: {
+    postPage: function (post) {
+      this.$root.$emit("onPostPage", post);
+    },
     getLength(obj) {
       return Object.values(obj).length;
     }
