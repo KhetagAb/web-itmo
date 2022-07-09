@@ -28,7 +28,8 @@ export default {
     data: function () {
         return {
             page: "Index",
-            post: undefined
+            post: undefined,
+            logins: {}
         }
     },
     components: {
@@ -49,9 +50,18 @@ export default {
     props: ["posts", "users", "comments"],
     computed: {
         getPosts: function () {
+          Object.values(this.users).forEach(u => this.logins[u.id] = u.login);
+          Object.values(this.comments).forEach(comment => {
+            if (this.posts[comment.postId].comments === undefined) {
+              this.posts[comment.postId].comments = {}
+            }
+
+            comment.userLogin = this.logins[comment.userId]
+            this.posts[comment.postId].comments[comment.id] = comment
+          });
+
           return Object.values(this.posts).sort((a, b) => b.id - a.id).map(post => {
-            post.userLogin = this.findUserById(post.userId).login;
-            post.comments = Object.values(this.comments).filter(c => c.postId === post.id);
+            post.userLogin = this.logins[post.userId];
             return post;
           });
         },

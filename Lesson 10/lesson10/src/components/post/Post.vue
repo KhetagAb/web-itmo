@@ -18,7 +18,7 @@
       <div class="right">
         <img src="../../assets/img/comments_16x16.png" title="Comments" alt="Comments"/>
         <a href="#">
-          {{ getLength(post.comments) }}
+          {{ getCommentsLength }}
         </a>
       </div>
     </div>
@@ -36,9 +36,14 @@ export default {
   methods: {
     postPage: function (post) {
       this.$root.$emit("onPostPage", post);
-    },
-    getLength(obj) {
-      return Object.values(obj).length;
+    }
+  },
+  computed: {
+    getCommentsLength() {
+      if (this.post.comments)
+        return Object.values(this.post.comments).length
+      else
+        return 0
     }
   },
   props: ["post", "withComments"]

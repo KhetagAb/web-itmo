@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header :userId="userId" :users="users"/>
+        <Header :user="getUser"/>
         <Middle :users="users" :posts="posts" :comments="comments"/>
         <Footer :users-count="getLength(users)" :posts-count="getLength(posts)"/>
     </div>
@@ -26,6 +26,15 @@ export default {
         return Object.values(obj).length;
       }
     },
+    computed: {
+      getUser: function () {
+        if (this.userId) {
+          return this.users[this.userId];
+        } else {
+          return null
+        }
+      }
+    },
     beforeCreate() {
         this.$root.$on("onEnter", (login, password) => {
             if (password === "") {
@@ -48,8 +57,8 @@ export default {
           if (this.userId) {
             this.$root.$emit("onRegisterValidationError", "You have already logged in");
           } else {
-            if (!login || !login.match(/[a-z]{3,16}/)) {
-              this.$root.$emit("onRegisterValidationError", "Login must contains 3-16 latin letters: " + login.match(/[a-z]{3,16}/));
+            if (!login || !login.match(/^[a-z]{3,16}$/)) {
+              this.$root.$emit("onRegisterValidationError", "Login must contains 3-16 latin letters");
             } else if (Object.values(this.users).find(e => e.login === login) !== undefined) {
               this.$root.$emit("onRegisterValidationError", "Login is already in use");
             } else if (!name || !name.match(/[a-z]{1,32}/)) {
